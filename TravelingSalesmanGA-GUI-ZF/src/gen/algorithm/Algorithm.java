@@ -63,7 +63,7 @@ public class Algorithm {
 					}
 				}
 			}
-			
+			//System.out.println("Used Random Crossover");
 		}
 		
 		if (rCross == false && hCross == true)
@@ -97,6 +97,7 @@ public class Algorithm {
 					}
 				}
 			}
+			//System.out.println("Used Half Path Crossover");
 		}
 		//Modeled after uniform crossover from: https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_crossover.htm
 		//Not biased however
@@ -116,6 +117,7 @@ public class Algorithm {
 				}
 				r1 = new Random();
 			}
+			//System.out.println("Used Uniform Crossover");
 		}
 		return resultChild;
 	}
@@ -185,8 +187,9 @@ public class Algorithm {
 	}
 	
 	//Selection function for choosing parents via tournament style
-	//Info for coding obtained from: https://www.geeksforgeeks.org/tournament-selection-ga/
-	private static Path tourneyStyle(Population p)
+	//Info for coding obtained from: https://www.geeksforgeeks.org/tournament-selection-ga/ and 
+	//https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_parent_selection.htm
+	private static Path tourneyStyleSelection(Population p)
 	{
 		Population t1 = new Population(tournPool,null, false);
 		Random r1 = new Random();
@@ -200,6 +203,11 @@ public class Algorithm {
 		//The fittest path in the tourney pool is returned and can be used for parents in crossover
 		Path champion = t1.getTopFitPath();
 		return champion;
+	}
+	
+	private static Path rouletteSelection(Population pop)
+	{
+		
 	}
 	
 	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean elite, boolean tourney, boolean roulette )
@@ -218,8 +226,8 @@ public class Algorithm {
 			for (int index = 0; index < p.getPopSize(); index = index+2)
 			{
 				//Start with parents chosen by the tournament selection
-				Path p1 = tourneyStyle(p);
-				Path p2 = tourneyStyle(p);
+				Path p1 = tourneyStyleSelection(p);
+				Path p2 = tourneyStyleSelection(p);
 				
 				//Apply crossover and add it to the new generation
 				Path resultChild = crossover(p1,p2,randCrossover,halfCrossover);

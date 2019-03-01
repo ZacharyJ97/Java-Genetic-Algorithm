@@ -46,6 +46,22 @@ public class Population {
     {
     	popPaths.add(index, p);
     }
+    
+    public void sortPathsByFittest() {
+    	int index = 1;
+    	for (Path p : popPaths)
+    	{
+    		if (p.GetPathFitness() < popPaths.get(index).GetPathFitness())
+    		{
+    			popPaths.set(index-1, popPaths.get(index));
+    			popPaths.set(index, p);
+    		}
+    		if (index < popPaths.size())
+    		{
+    			index++;
+    		}
+    	}
+    }
 	
 	
 }
