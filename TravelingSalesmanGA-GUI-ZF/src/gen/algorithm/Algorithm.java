@@ -1,7 +1,7 @@
 package gen.algorithm;
 import java.util.*;
 
-/*Handles performing the operations of a genetic algorithm, such as selection, crossover,
+/**Handles performing the operations of a genetic algorithm, such as selection, crossover,
  * mutation, etc
  */
 public class Algorithm {
@@ -12,14 +12,24 @@ public class Algorithm {
 	private static boolean randCrossover = false;
 	private static boolean halfCrossover = false;
 	
+	private static boolean swapMutate = true;
+	
 	//Static variables for the population size, mutation rate default, and default tournament pool size
 	public static int popSize = 100;
 	private static double m_rate = .1;
 	private static int tournPool = (popSize / 2);
 	
-	//The two versions are similar in crossover and duplication prevention, but one randomly selects a subset to cross
-	//While the other takes half of the path and crosses it.
+	
 	//Crossover methods like this can be found described here https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_crossover.htm
+	/**
+	 * Two versions of crossover and duplication prevention, but one randomly selects a subset to cross
+	While the other takes half of the path and crosses it.
+	 * @param p1 The First Parent Path
+	 * @param p2 The Second Parent Path
+	 * @param rCross Use random crossover or not
+	 * @param hCross Use half the path crossover or not
+	 * @return returns a child of crossin over two
+	 */
 	public static Path crossover(Path p1, Path p2, boolean rCross, boolean hCross)
 	{
 		Path resultChild = new Path();
@@ -104,10 +114,53 @@ public class Algorithm {
 			//System.out.println("Used Half Path Crossover");
 		}
 		
+		
+		//This code was an attempt to use uniform crossover but it does not work well with TSP due to duplicates
+		/*if (rCross == false && hCross == false) 
+		{
+			Random r1 = new Random();
+			int prob = r1.nextInt(101);
+			
+			for (int index = 0; index < p1.PathSize(); index++)
+			{
+				if (prob < 50)
+				{
+					if (resultChild.HasDuplicatePlace(p1.GetPlaceFromPath(index)))
+					{
+						resultChild.addPlaceToPath(index, p2.GetPlaceFromPath(index));
+					}
+					else
+					{
+						resultChild.addPlaceToPath(index, p1.GetPlaceFromPath(index));
+					}
+				}
+				else
+				{
+					if (resultChild.HasDuplicatePlace(p2.GetPlaceFromPath(index)))
+					{
+						resultChild.addPlaceToPath(index, p1.GetPlaceFromPath(index));
+					}
+					else
+					{
+						resultChild.addPlaceToPath(index, p2.GetPlaceFromPath(index));
+					}
+					
+				}
+				prob = r1.nextInt();
+			}
+		}*/
+		
 		return resultChild;
 	}
 	
 	//Mutation function options based on swap mutation and scramble subset mutation as detailed in: https://www.geeksforgeeks.org/mutation-algorithms-for-string-manipulation-ga/
+	/**
+	 * Mutation has two options: swap by default and scramble. Scramble selects a random subset of places from the pass path and shuffles the contents within it
+	 * While swap simply selects two places within the path at random and swaps their positions for each other's.
+	 * @param rate Select the rate comparison at which mutation may occur.
+	 * @param p The Path to have mutation performed on.
+	 * @param swap Indicate whether swap mutation is desired or not, where false activates scramble mutation.
+	 */
 	private static void mutation(double rate, Path p, boolean swap)
 	{
 		m_rate = rate;
@@ -132,6 +185,7 @@ public class Algorithm {
 					p.addPlaceToPath(i, n2);
 					
 				}
+				rand = Math.random();
 					
 			}
 			//System.out.println("Swap mutation used");
@@ -248,7 +302,7 @@ public class Algorithm {
 	}
 	
 	//Generate population applies the operators to our population and takes in the booleans for selecting those options
-	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean tourney, boolean roulette )
+	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean tourney, boolean roulette, boolean swapMutation )
 	{
 		//Declarations
 		Population nextGeneration = new Population(p.getPopSize(),null, false);
@@ -256,6 +310,8 @@ public class Algorithm {
 		rouletteStyle = roulette;
 		halfCrossover = halfPathCrossover;
 		randCrossover = randomCrossover;
+		swapMutate = swapMutation;
+		
 			//Roll through the population
 			for (int index = 0; index < p.getPopSize(); index = index+2)
 			{
@@ -282,8 +338,8 @@ public class Algorithm {
 				Path resultChild2 = crossover(p2,p1,randCrossover,halfCrossover);
 				
 				//Sprinkle mutation which may be swap or scramble style
-				mutation(.7, resultChild, true);
-				mutation(.7, resultChild2, true);
+				mutation(.7, resultChild, swapMutate);
+				mutation(.7, resultChild2, swapMutate);
 				
 				//Next generation formed by the final child product
 				nextGeneration.addPathToPop(resultChild, index);

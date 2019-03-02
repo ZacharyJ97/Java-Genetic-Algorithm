@@ -6,22 +6,22 @@ public class MainGA {
 	
 	public static void main(String[] args) {
 		
-		int numPlaces = 100;
+		int numPlaces = 20;
 		for (int i=0; i < numPlaces; i++)
 		{
 			Place place = new Place();
 			Path.GetMap().add(place);
 		}
 	    
-	    int numGenerations = 1000;
+	    int numGenerations = 100;
 	    
 	    Population initPop = new Population(100,null,true);
 	    System.out.println("First Path Length: " + initPop.getTopFitPath().calcPathDistance());
 	    
-	    initPop = Algorithm.generateNewPop(initPop,true,false,false,true);
+	    initPop = Algorithm.generateNewPop(initPop,true,false,false,true, true);
 	    for (int gen = 0; gen < numGenerations; gen++)
 	    {
-	    	initPop = Algorithm.generateNewPop(initPop,true,false,false,true);
+	    	initPop = Algorithm.generateNewPop(initPop,true,false,false,true, true);
 	    	
 	    }
 	    
