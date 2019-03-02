@@ -23,6 +23,7 @@ public class Algorithm {
 	{
 		Path resultChild = new Path();
 		
+		//Random subset of the path is chosen for crossover
 		if (rCross == true && hCross == false)
 		{
 			//Parent 1's random subset of places to cross
@@ -66,6 +67,7 @@ public class Algorithm {
 			//System.out.println("Used Random Crossover");
 		}
 		
+		//Half the entire path crossover
 		if (rCross == false && hCross == true)
 		{
 			//Taking Half of parent 1
@@ -99,28 +101,11 @@ public class Algorithm {
 			}
 			//System.out.println("Used Half Path Crossover");
 		}
-		//Modeled after uniform crossover from: https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_crossover.htm
-		//Not biased however
-		if (rCross == false && hCross == false)
-		{
-			Random r1 = new Random();
-			
-			for(int index = 0; index < resultChild.PathSize(); index++)
-			{
-				if (r1.nextInt(101) < 50)
-				{
-					resultChild.addPlaceToPath(index, p1.GetPlaceFromPath(index));
-				}
-				else
-				{
-					resultChild.addPlaceToPath(index,p2.GetPlaceFromPath(index));
-				}
-				r1 = new Random();
-			}
-			//System.out.println("Used Uniform Crossover");
-		}
+		
 		return resultChild;
 	}
+		
+		
 		
 		
 	
@@ -207,7 +192,34 @@ public class Algorithm {
 	
 	private static Path rouletteSelection(Population pop)
 	{
-		
+		pop.sortPopByFittest();
+		Random select = new Random();
+		double prob = select.nextDouble();
+		int subSize = (pop.getPopSize() / 4);
+		if (prob <= .49)
+		{
+			Random quarter1 = new Random();
+			int index = quarter1.nextInt(subSize);
+			return pop.getPathFromPop(index);
+		}
+		else if (prob > .49 && prob <= .79)
+		{
+			Random quarter2 = new Random();
+			int index = quarter2.nextInt(((subSize*2) - subSize)+1) + subSize;
+			return pop.getPathFromPop(index);
+		}
+		else if (prob > .79 && prob <= .94)
+		{
+			Random quarter3 = new Random();
+			int index = quarter3.nextInt(((subSize*3) - (subSize*2))+1) + (subSize*2);
+			return pop.getPathFromPop(index);
+		}
+		else
+		{
+			Random quarter4 = new Random();
+			int index = quarter4.nextInt(((subSize*4) - (subSize*3))) + (subSize*3);
+			return pop.getPathFromPop(index);
+		}
 	}
 	
 	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean elite, boolean tourney, boolean roulette )
@@ -221,25 +233,39 @@ public class Algorithm {
 		
 		
 		//Code for tournament selection only
-		if (tournamentStyle)
-		{
+		
 			for (int index = 0; index < p.getPopSize(); index = index+2)
 			{
-				//Start with parents chosen by the tournament selection
-				Path p1 = tourneyStyleSelection(p);
-				Path p2 = tourneyStyleSelection(p);
+				Path p1 = new Path();
+				Path p2 = new Path();
+				
+				if (tournamentStyle==true && rouletteStyle == false)
+				{
+					//Start with parents chosen by the tournament selection
+					p1 = tourneyStyleSelection(p);
+					p2 = tourneyStyleSelection(p);
+				}
+				if (tournamentStyle == false && rouletteStyle == true)
+				{
+					p1 = rouletteSelection(p);
+					p2 = rouletteSelection(p);
+				}
+				
 				
 				//Apply crossover and add it to the new generation
 				Path resultChild = crossover(p1,p2,randCrossover,halfCrossover);
 				Path resultChild2 = crossover(p2,p1,randCrossover,halfCrossover);
+				
+				//Sprinkle mutation
+				mutation(.01, resultChild, false);
+				mutation(.01, resultChild2, false);
+				
 				nextGeneration.addPathToPop(resultChild, index);
 				nextGeneration.addPathToPop(resultChild2, index+1);
 				
-				//Sprinkle mutation
-				mutation(.01, nextGeneration.getPathFromPop(index), false);
+				
 				
 			}
-		}
 		
 		return nextGeneration;
 		

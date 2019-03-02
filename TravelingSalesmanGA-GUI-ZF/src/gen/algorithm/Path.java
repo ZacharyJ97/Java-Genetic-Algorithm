@@ -90,10 +90,10 @@ public class Path {
     }
     
     //Calculates fitnessScore by associating larger fitnessScore values with shorter distances
+    //Fitness scoring such as this was detailed in the pdf at this location: https://pdfs.semanticscholar.org/c31b/fd16935da83e419d631245272d7838262308.pdf
     public void calcFitness()
     {
-    	//Multiplying by ten thousand simplifies extra small decimals obtained from dividing large distances into 1
-    	//It just makes fitnessScore values easier to work with
+    	//Multiplying by ten thousand to just make it more readable upon output
     	fitnessScore = ((1/calcPathDistance())*10000);
     }
     

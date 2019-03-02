@@ -13,15 +13,15 @@ public class MainGA {
 			Path.GetMap().add(place);
 		}
 	    
-	    int numGenerations = 100;
+	    int numGenerations = 500;
 	    
 	    Population initPop = new Population(100,null,true);
 	    System.out.println("First Path Length: " + initPop.getTopFitPath().calcPathDistance());
 	    
-	    initPop = Algorithm.generateNewPop(initPop,false,false,false,true,false);
+	    initPop = Algorithm.generateNewPop(initPop,true,false,false,false,true);
 	    for (int gen = 0; gen < numGenerations; gen++)
 	    {
-	    	initPop = Algorithm.generateNewPop(initPop,false,false,false,true,false);
+	    	initPop = Algorithm.generateNewPop(initPop,true,false,false,false,true);
 	    	
 	    }
 	    
@@ -29,7 +29,7 @@ public class MainGA {
         System.out.println("Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness());
         System.out.println("Final Path:");
         System.out.println(initPop.getTopFitPath().toString());
-	    
+        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
 	}
 
 }
