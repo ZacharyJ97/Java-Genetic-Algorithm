@@ -135,9 +135,9 @@ public class Algorithm_Control {
 		lblMutationMethod.setBounds(737, 438, 148, 34);
 		frame.getContentPane().add(lblMutationMethod);
 		
-		Button button = new Button("Start Algorithm");
-		button.setFont(new Font("Dialog", Font.PLAIN, 18));
-		button.setBounds(810, 565, 148, 52);
-		frame.getContentPane().add(button);
+		Button startButton = new Button("Start Algorithm");
+		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
+		startButton.setBounds(810, 565, 148, 52);
+		frame.getContentPane().add(startButton);
 	}
 }
