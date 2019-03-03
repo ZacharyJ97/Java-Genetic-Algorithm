@@ -1,8 +1,10 @@
 package gen.algorithm;
 import java.util.*;
 
-/**Handles performing the operations of a genetic algorithm, such as selection, crossover,
- * mutation, etc
+/**
+ * Handles performing the operations of a genetic algorithm, such as selection, crossover, mutation, etc
+ * @author copyright Zachary Fitzpatrick, 2019
+ *Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
  */
 public class Algorithm {
 	//Booleans for option selection in each operator of Selection, Crossover, Mutation
@@ -239,9 +241,13 @@ public class Algorithm {
 	}
 		
 	
-	//Selection function for choosing parents via tournament style
 	//Info for coding obtained from: https://www.geeksforgeeks.org/tournament-selection-ga/ and 
 	//https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_parent_selection.htm
+	/**
+	 * Selection function for choosing parents via tournament style
+	 * @param p Population to have Paths selected from
+	 * @return Returns the tournament champion path
+	 */
 	private static Path tourneyStyleSelection(Population p)
 	{
 		//Create a population to hold our tournament contestants, sized at half a population by default
@@ -263,8 +269,13 @@ public class Algorithm {
 		return champion;
 	}
 	
-	//This roulette selection orders the population by fittest first and least fit last, and then takes four equal sections of the population,
-	//There is higher probably of selecting from the first 25 paths, and then less probability for the 2nd, 3rd, and 4th quarter of the population
+	
+	/**
+	 * This roulette selection orders the population by fittest first and least fit last, and then splits the population into four equal sections of the population,
+	There is higher probably of selecting from the first 25 paths, and then less probability for the 2nd, 3rd, and 4th quarter of the population
+	 * @param pop The population to have paths selected from
+	 * @return Returns a Path given by the roulette wheel
+	 */
 	private static Path rouletteSelection(Population pop)
 	{
 		pop.sortPopByFittest();
@@ -300,8 +311,17 @@ public class Algorithm {
 		}
 		
 	}
-	
-	//Generate population applies the operators to our population and takes in the booleans for selecting those options
+
+	/**
+	 * Generate population applies the operators to our population and takes in the booleans for selecting those options
+	 * @param p The population to base a new population on
+	 * @param randomCrossover Choose whether or not random crossover is used
+	 * @param halfPathCrossover Choose whether or not half path crossover is used
+	 * @param tourney Choose tournament style for a selection method
+	 * @param roulette Choose roulette style for a selection method
+	 * @param swapMutation Choose whether or not swap mutation is used, it not then scramble mutation is used
+	 * @return The new population is returned
+	 */
 	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean tourney, boolean roulette, boolean swapMutation )
 	{
 		//Declarations
@@ -338,8 +358,8 @@ public class Algorithm {
 				Path resultChild2 = crossover(p2,p1,randCrossover,halfCrossover);
 				
 				//Sprinkle mutation which may be swap or scramble style
-				mutation(.7, resultChild, swapMutate);
-				mutation(.7, resultChild2, swapMutate);
+				mutation(.1, resultChild, swapMutate);
+				mutation(.1, resultChild2, swapMutate);
 				
 				//Next generation formed by the final child product
 				nextGeneration.addPathToPop(resultChild, index);

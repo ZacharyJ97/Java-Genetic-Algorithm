@@ -2,7 +2,11 @@ package gen.algorithm;
 
 import java.util.*;
 
-/*Manages a path through all the places contained in the map.
+/**
+ * @author copyright Zachary Fitzpatrick, 2019
+ * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
+ *
+ *Manages a path through all the places contained in a map.
  * Characterized by a beginning point, visiting all places once, and then
  * returning to the origin.
  */
@@ -25,7 +29,10 @@ public class Path {
     private double totalDistance;
     private double placeDistance;
     
-    //Blank slate path (helpful for crossover method)
+    /**
+     * 
+     * Path is decidedly filled with nulls according to the map size that becomes useful in content checks later for crossover
+     */
     public Path()
     {
     	for(Place place : map)
@@ -42,10 +49,17 @@ public class Path {
     public double PathSize() {return travelPath.size();}
     ///////////////////////////////////////////////
     
-    // Adds a place to the path at the specified index (position)
+    /**
+     * Adds a place to the path at a specific index (position)
+     * @param index The spot to put the place at
+     * @param p The passed in Place to be put in the path
+     */
     public void addPlaceToPath(int index, Place p) { travelPath.set(index, p); }
     
     @Override
+    /**
+     * Outputs a string detailing all the places in the path with their name, x coord, and y coord
+     */
     public String toString()
     {
     	String path = "(";
@@ -56,9 +70,10 @@ public class Path {
     	return path;
     }
     
-    
-    
-    //Sums up the distances between each consecutive city in a path and returns the total distance
+    /**
+     * Sums up the distances between each consecutive city in a path and returns the total distance
+     * @return The distance as a double
+     */
     public double calcPathDistance()
     {
     	if (totalDistance == 0) 
@@ -89,23 +104,32 @@ public class Path {
         return totalDistance;
     }
     
-    //Calculates fitnessScore by associating larger fitnessScore values with shorter distances
     //Fitness scoring such as this was detailed in the pdf at this location: https://pdfs.semanticscholar.org/c31b/fd16935da83e419d631245272d7838262308.pdf
+    
+    /**
+     * Calculates fitnessScore by associating larger fitnessScore values with shorter distances
+     * 
+     */
     public void calcFitness()
     {
     	//Multiplying by ten thousand to just make it more readable upon output
     	fitnessScore = ((1/calcPathDistance())*10000);
     }
     
-    /*Returns boolean if the path currently has the place passed in as a parameter
+    /**
+     * Returns boolean if the path currently has the place passed in as a parameter
      * To be handy later for crossover functionalities
+     * @param p Place to check whether or not is is present
+     * @return Boolean indicating if the place is already present in the path
      */
     public boolean HasDuplicatePlace(Place p)
     {
     	return travelPath.contains(p);
     }
     
-    //Generates a full path
+    /**
+     * Rolls through the map of places and adds them all to the path
+     */
     public void CreatePath() {
     	int index = 0;
        // Loop through all our places in the map and add them to the current path
@@ -115,11 +139,17 @@ public class Path {
        }
     }
     
-    //Measures distance from place to place
+    //Distance formula can be found here: https://www.khanacademy.org/math/basic-geo/basic-geometry-pythagorean-theorem/pythagorean-theorem-distance/a/distance-formula
+    /**
+     * Measures distance from place to place
+     * @param p1 Place 1 for distance measurement
+     * @param p2 Place 2 for distance measurement
+     * @return Return a double that is the distance between the two input places
+     */
     public double MeasurePlaceDistance(Place p1, Place p2)
     {
-    	double x = Math.abs(p1.getX() - p2.getX());
-		double y = Math.abs(p1.getY() - p2.getY());
+    	double x = Math.abs(p2.getX() - p1.getX());
+		double y = Math.abs(p2.getY() - p1.getY());
 		placeDistance = Math.sqrt((x*x) + (y*y));
 		return placeDistance;
     }

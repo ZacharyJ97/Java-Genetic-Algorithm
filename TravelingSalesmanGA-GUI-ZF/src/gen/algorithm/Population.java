@@ -2,7 +2,12 @@ package gen.algorithm;
 
 import java.util.*;
 
-/*Population will manage our sets of paths as potential solutions*/
+/**
+ * @author copyright Zachary Fitzpatrick, 2019.
+ * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
+ *
+ * Population will manage our sets of paths as potential solutions
+ */
 public class Population {
 	
 	//Declarations
@@ -28,8 +33,11 @@ public class Population {
 	public int getPopSize() {return popPaths.size();}
 	public Path getPathFromPop(int index) {return popPaths.get(index);}
 	
-	// Retrieves the path deemed to be the most fit
-    public Path getTopFitPath() {
+    /**
+     * Retrieves the path deemed to be most fit
+     * @return Return the path determined to be most fit
+     */
+	public Path getTopFitPath() {
         Path fit = popPaths.get(0);
         //Go through our population and return the top fit path
         for (Path p : popPaths) 
@@ -41,12 +49,19 @@ public class Population {
         }
         return fit;
     }
-    
+    /**
+     * Adds the path to the population at the specified index position
+     * @param p Path to add to population
+     * @param index Position within the population to add the path to
+     */
     public void addPathToPop(Path p, int index)
     {
     	popPaths.add(index, p);
     }
     
+    /**
+     * Function meant to sort a population of paths by fittest paths near the front and least fit near the end
+     */
     public void sortPopByFittest() {
     	for (Path p : popPaths)
     	{
@@ -61,6 +76,7 @@ public class Population {
 	    			popPaths.set(index2-1, next);
 	    		}
 			}
+			index2++;
     	}
     }
 	
