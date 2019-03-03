@@ -30,7 +30,7 @@ public class Algorithm {
 	 * @param p2 The Second Parent Path
 	 * @param rCross Use random crossover or not
 	 * @param hCross Use half the path crossover or not
-	 * @return returns a child of crossin over two
+	 * @return returns a child of crossing over two
 	 */
 	public static Path crossover(Path p1, Path p2, boolean rCross, boolean hCross)
 	{
