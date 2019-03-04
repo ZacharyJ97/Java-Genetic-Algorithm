@@ -3,14 +3,8 @@ package gen.algorithm;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
-import javax.swing.JTextPane;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import java.awt.TextArea;
 import java.awt.Color;
 import javax.swing.JComboBox;
@@ -25,8 +19,26 @@ import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class Algorithm_Control {
+	
+	//My Declarations
+	private double mutationRate = .01;
+	private int numPlaces = 50;
+    private int numGenerations = 100;
+    private int numPaths = 100;
+    
+    private boolean rouletteStyle = true;
+    private boolean tourneyStyle = false;
+    private boolean randCross = true;
+    private boolean halfCross = false;
+    private boolean swapMutate = true;
+
+	
 
 	private JFrame frame;
 	private final Action action = new SwingAction();
@@ -60,32 +72,44 @@ public class Algorithm_Control {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize() {		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 995, 683);
+		frame.setBounds(100, 100, 995, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		TextArea textArea = new TextArea();
 		textArea.setBackground(Color.WHITE);
 		textArea.setEditable(false);
-		textArea.setBounds(10, 10, 721, 607);
+		textArea.setBounds(10, 10, 721, 644);
 		frame.getContentPane().add(textArea);
 		
 		JPanel selectionPanel = new JPanel();
 		selectionPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		FlowLayout flowLayout = (FlowLayout) selectionPanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
-		selectionPanel.setBounds(737, 203, 221, 82);
+		selectionPanel.setBounds(737, 252, 221, 82);
 		frame.getContentPane().add(selectionPanel);
 		
 		JRadioButton rdbtnRouletteStyle = new JRadioButton("Roulette Style");
+		rdbtnRouletteStyle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				rouletteStyle = true;
+				tourneyStyle = false;
+			}
+		});
 		selectionGroup.add(rdbtnRouletteStyle);
 		rdbtnRouletteStyle.setSelected(true);
 		rdbtnRouletteStyle.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		selectionPanel.add(rdbtnRouletteStyle);
 		
 		JRadioButton rdbtnTournamentStyle = new JRadioButton("Tournament Style");
+		rdbtnTournamentStyle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				tourneyStyle = true;
+				rouletteStyle = false;
+			}
+		});
 		selectionGroup.add(rdbtnTournamentStyle);
 		rdbtnTournamentStyle.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		selectionPanel.add(rdbtnTournamentStyle);
@@ -116,75 +140,106 @@ public class Algorithm_Control {
 		
 		JLabel lblSelectionMethod = new JLabel("Selection Method:");
 		lblSelectionMethod.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSelectionMethod.setBounds(737, 164, 148, 34);
+		lblSelectionMethod.setBounds(737, 213, 148, 34);
 		frame.getContentPane().add(lblSelectionMethod);
 		
 		JPanel crossoverPanel = new JPanel();
 		crossoverPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		FlowLayout flowLayout_1 = (FlowLayout) crossoverPanel.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		crossoverPanel.setBounds(737, 340, 221, 82);
+		crossoverPanel.setBounds(737, 377, 221, 82);
 		frame.getContentPane().add(crossoverPanel);
 		
 		JRadioButton rdbtnRandomSubset = new JRadioButton("Random Subset");
+		rdbtnRandomSubset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				randCross = true;
+				halfCross = false;
+			}
+		});
 		crossGroup.add(rdbtnRandomSubset);
 		rdbtnRandomSubset.setSelected(true);
 		rdbtnRandomSubset.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		crossoverPanel.add(rdbtnRandomSubset);
 		
 		JRadioButton rdbtnHalf = new JRadioButton("Half Path Size");
+		rdbtnHalf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				randCross = false;
+				halfCross = true;
+			}
+		});
 		crossGroup.add(rdbtnHalf);
 		rdbtnHalf.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		crossoverPanel.add(rdbtnHalf);
 		
 		JLabel lblCrossoverMethod = new JLabel("Crossover Method:");
 		lblCrossoverMethod.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblCrossoverMethod.setBounds(737, 301, 148, 34);
+		lblCrossoverMethod.setBounds(737, 338, 148, 34);
 		frame.getContentPane().add(lblCrossoverMethod);
 		
 		JPanel mutationPanel = new JPanel();
 		mutationPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		FlowLayout flowLayout_2 = (FlowLayout) mutationPanel.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
-		mutationPanel.setBounds(737, 477, 221, 82);
+		mutationPanel.setBounds(737, 514, 221, 82);
 		frame.getContentPane().add(mutationPanel);
 		
 		JRadioButton rdbtnSwapMutation = new JRadioButton("Swap Mutation");
+		rdbtnSwapMutation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (rdbtnSwapMutation.isSelected())
+				{
+					swapMutate = true;
+				}
+			}
+		});
+
 		mutateGroup.add(rdbtnSwapMutation);
 		rdbtnSwapMutation.setSelected(true);
 		rdbtnSwapMutation.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		mutationPanel.add(rdbtnSwapMutation);
 		
 		JRadioButton rdbtnScrambleSubset = new JRadioButton("Scramble Subset");
+		rdbtnScrambleSubset.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (rdbtnScrambleSubset.isSelected())
+				{
+					swapMutate = false;
+				}
+			}
+		});
 		mutateGroup.add(rdbtnScrambleSubset);
 		rdbtnScrambleSubset.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		mutationPanel.add(rdbtnScrambleSubset);
 		
 		JLabel lblMutationMethod = new JLabel("Mutation Method:");
 		lblMutationMethod.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblMutationMethod.setBounds(737, 438, 148, 34);
+		lblMutationMethod.setBounds(737, 475, 148, 34);
 		frame.getContentPane().add(lblMutationMethod);
 		
 		Button startButton = new Button("Start Algorithm");
 		startButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {		
 				
-				int numPlaces = 100;
 				for (int i=0; i < numPlaces; i++)
 				{
 					Place place = new Place();
 					Path.GetMap().add(place);
 				}
 			    
-			    int numGenerations = 500;
+				int gen = 0;
+				
+			    Population initPop = new Population(numPaths,null,true);
+			    System.out.println("Generation " + gen + ":" );
+			    System.out.println("Best Path Length: " + initPop.getTopFitPath().calcPathDistance());
+			    System.out.println("Fitness Score: " + initPop.getTopFitPath().GetPathFitness());
+			    System.out.println("Number of Places in Path: " + initPop.getTopFitPath().PathSize());
 			    
-			    Population initPop = new Population(100,null,true);
-			    System.out.println("First Path Length: " + initPop.getTopFitPath().calcPathDistance());
-			    
-			    initPop = Algorithm.generateNewPop(initPop,true,false,false,true, true);
-			    for (int gen = 0; gen < numGenerations; gen++)
+			    initPop = Algorithm.generateNewPop(initPop, randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
+			    for (gen = 0; gen < numGenerations; gen++)
 			    {
-			    	initPop = Algorithm.generateNewPop(initPop,true,false,false,true, true);
+			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
 			    	
 			    }
 			    
@@ -193,13 +248,19 @@ public class Algorithm_Control {
 		        System.out.println("Final Path:");
 		        System.out.println(initPop.getTopFitPath().toString());
 		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
-				
-				System.out.println("button clicked");
 			}
 		});
 		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
-		startButton.setBounds(810, 565, 148, 52);
+		startButton.setBounds(810, 602, 148, 52);
 		frame.getContentPane().add(startButton);
+		
+		JComboBox comboBox = new JComboBox();
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {".01 Mutation Rate", ".05 Mutation Rate", ".1 Mutation Rate", ".2 Mutation Rate"}));
+		comboBox.setMaximumRowCount(3);
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		comboBox.setBackground(Color.WHITE);
+		comboBox.setBounds(737, 174, 221, 34);
+		frame.getContentPane().add(comboBox);
 	}
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {

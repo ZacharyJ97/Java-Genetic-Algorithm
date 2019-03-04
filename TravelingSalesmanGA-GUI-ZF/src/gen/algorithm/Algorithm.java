@@ -17,7 +17,7 @@ public class Algorithm {
 	private static boolean swapMutate = true;
 	
 	//Static variables for the population size, mutation rate default, and default tournament pool size
-	public static int popSize = 100;
+	public static int popSize;
 	private static double m_rate = .1;
 	private static int tournPool = (popSize / 2);
 	
@@ -78,7 +78,7 @@ public class Algorithm {
 					}
 				}
 			}
-			//System.out.println("Used Random Crossover");
+			System.out.println("Used Random Crossover");
 		}
 		
 		//Half the entire path crossover method
@@ -113,7 +113,7 @@ public class Algorithm {
 					}
 				}
 			}
-			//System.out.println("Used Half Path Crossover");
+			System.out.println("Used Half Path Crossover");
 		}
 		
 		
@@ -190,7 +190,7 @@ public class Algorithm {
 				rand = Math.random();
 					
 			}
-			//System.out.println("Swap mutation used");
+			System.out.println("Swap mutation used");
 		}
 		
 		//If not swap, scramble a random subset of Path p
@@ -234,7 +234,7 @@ public class Algorithm {
 				}
 
 			}
-			//System.out.println("Scramble Mutation Used");
+			System.out.println("Scramble Mutation Used");
 		}
 		//Generate a new random variable
 		rand = Math.random();
@@ -264,7 +264,7 @@ public class Algorithm {
 		//The fittest path in the tourney pool is returned and can be used for parents in crossover
 		Path champion = t1.getTopFitPath();
 		
-		//System.out.println("tourneySelection used");
+		System.out.println("tourneySelection used");
 		
 		return champion;
 	}
@@ -283,7 +283,7 @@ public class Algorithm {
 		double prob = select.nextDouble();
 		int subSize = (pop.getPopSize() / 4);
 		
-		//System.out.println("Used Roulette Selection");
+		System.out.println("Used Roulette Selection");
 		
 		if (prob <= .49)
 		{
@@ -320,17 +320,22 @@ public class Algorithm {
 	 * @param tourney Choose tournament style for a selection method
 	 * @param roulette Choose roulette style for a selection method
 	 * @param swapMutation Choose whether or not swap mutation is used, it not then scramble mutation is used
+	 * @param mutateRate TODO
 	 * @return The new population is returned
 	 */
-	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean tourney, boolean roulette, boolean swapMutation )
+	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean tourney, boolean roulette, boolean swapMutation, double mutateRate )
 	{
 		//Declarations
-		Population nextGeneration = new Population(p.getPopSize(),null, false);
+		popSize = p.getPopSize();
+		Population nextGeneration = new Population(popSize,null, false);
 		tournamentStyle = tourney;
 		rouletteStyle = roulette;
 		halfCrossover = halfPathCrossover;
 		randCrossover = randomCrossover;
 		swapMutate = swapMutation;
+		m_rate = mutateRate;
+		
+		
 		
 			//Roll through the population
 			for (int index = 0; index < p.getPopSize(); index = index+2)
@@ -358,8 +363,8 @@ public class Algorithm {
 				Path resultChild2 = crossover(p2,p1,randCrossover,halfCrossover);
 				
 				//Sprinkle mutation which may be swap or scramble style
-				mutation(.1, resultChild, swapMutate);
-				mutation(.1, resultChild2, swapMutate);
+				mutation(m_rate, resultChild, swapMutate);
+				mutation(m_rate, resultChild2, swapMutate);
 				
 				//Next generation formed by the final child product
 				nextGeneration.addPathToPop(resultChild, index);
