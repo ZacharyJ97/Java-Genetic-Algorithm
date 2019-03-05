@@ -90,22 +90,22 @@ public class Algorithm_Control {
 	 */
 	private void initialize() {		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 995, 930);
+		frame.setBounds(100, 100, 1250, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		TextArea generationsTextArea = new TextArea();
-		generationsTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
+		generationsTextArea.setFont(new Font("Arial", Font.PLAIN, 20));
 		generationsTextArea.setBackground(Color.WHITE);
 		generationsTextArea.setEditable(false);
-		generationsTextArea.setBounds(10, 10, 721, 586);
+		generationsTextArea.setBounds(10, 10, 981, 575);
 		frame.getContentPane().add(generationsTextArea);
 		
 		JPanel selectionPanel = new JPanel();
 		selectionPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		FlowLayout flowLayout = (FlowLayout) selectionPanel.getLayout();
 		flowLayout.setAlignment(FlowLayout.LEFT);
-		selectionPanel.setBounds(737, 252, 221, 82);
+		selectionPanel.setBounds(997, 252, 221, 82);
 		frame.getContentPane().add(selectionPanel);
 		
 		JRadioButton rdbtnRouletteStyle = new JRadioButton("Roulette Style");
@@ -168,7 +168,7 @@ public class Algorithm_Control {
 		numGenerationCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		numGenerationCB.setMaximumRowCount(4);
 		numGenerationCB.setModel(new DefaultComboBoxModel(new String[] {"100 Generations", "500 Generations", "1000 Generations", "2000 Generations"}));
-		numGenerationCB.setBounds(737, 124, 221, 34);
+		numGenerationCB.setBounds(997, 124, 221, 34);
 		frame.getContentPane().add(numGenerationCB);
 		
 		JComboBox numPlacesCB = new JComboBox();
@@ -200,7 +200,7 @@ public class Algorithm_Control {
 		numPlacesCB.setModel(new DefaultComboBoxModel(new String[] {"50 Places on Map", "100 Places on Map", "150 Places on Map", "200 Places on Map"}));
 		numPlacesCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		numPlacesCB.setMaximumRowCount(4);
-		numPlacesCB.setBounds(737, 66, 221, 34);
+		numPlacesCB.setBounds(997, 66, 221, 34);
 		frame.getContentPane().add(numPlacesCB);
 		
 		JComboBox populationSizeCB = new JComboBox();
@@ -227,19 +227,19 @@ public class Algorithm_Control {
 		populationSizeCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		populationSizeCB.setModel(new DefaultComboBoxModel(new String[] {"100 Paths in Population", "200 Paths in Population", "300 Paths in Population"}));
 		populationSizeCB.setMaximumRowCount(3);
-		populationSizeCB.setBounds(737, 10, 221, 34);
+		populationSizeCB.setBounds(997, 10, 221, 34);
 		frame.getContentPane().add(populationSizeCB);
 		
 		JLabel lblSelectionMethod = new JLabel("Selection Method:");
 		lblSelectionMethod.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblSelectionMethod.setBounds(737, 213, 148, 34);
+		lblSelectionMethod.setBounds(997, 213, 148, 34);
 		frame.getContentPane().add(lblSelectionMethod);
 		
 		JPanel crossoverPanel = new JPanel();
 		crossoverPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		FlowLayout flowLayout_1 = (FlowLayout) crossoverPanel.getLayout();
 		flowLayout_1.setAlignment(FlowLayout.LEFT);
-		crossoverPanel.setBounds(737, 377, 221, 82);
+		crossoverPanel.setBounds(997, 377, 221, 82);
 		frame.getContentPane().add(crossoverPanel);
 		
 		JRadioButton rdbtnRandomSubset = new JRadioButton("Random Subset");
@@ -275,14 +275,14 @@ public class Algorithm_Control {
 		
 		JLabel lblCrossoverMethod = new JLabel("Crossover Method:");
 		lblCrossoverMethod.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblCrossoverMethod.setBounds(737, 338, 148, 34);
+		lblCrossoverMethod.setBounds(997, 338, 148, 34);
 		frame.getContentPane().add(lblCrossoverMethod);
 		
 		JPanel mutationPanel = new JPanel();
 		mutationPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
 		FlowLayout flowLayout_2 = (FlowLayout) mutationPanel.getLayout();
 		flowLayout_2.setAlignment(FlowLayout.LEFT);
-		mutationPanel.setBounds(737, 514, 221, 82);
+		mutationPanel.setBounds(997, 503, 221, 82);
 		frame.getContentPane().add(mutationPanel);
 		
 		JRadioButton rdbtnSwapMutation = new JRadioButton("Swap Mutation");
@@ -317,7 +317,7 @@ public class Algorithm_Control {
 		
 		JLabel lblMutationMethod = new JLabel("Mutation Method:");
 		lblMutationMethod.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblMutationMethod.setBounds(737, 475, 148, 34);
+		lblMutationMethod.setBounds(997, 464, 148, 34);
 		frame.getContentPane().add(lblMutationMethod);
 		
 		JComboBox mutationRateCB = new JComboBox();
@@ -349,19 +349,19 @@ public class Algorithm_Control {
 		mutationRateCB.setMaximumRowCount(4);
 		mutationRateCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		mutationRateCB.setBackground(Color.WHITE);
-		mutationRateCB.setBounds(737, 174, 221, 34);
+		mutationRateCB.setBounds(997, 174, 221, 34);
 		frame.getContentPane().add(mutationRateCB);
 		
 		TextArea fittestTextArea = new TextArea();
 		fittestTextArea.setFont(new Font("Arial", Font.BOLD, 18));
 		fittestTextArea.setBackground(Color.WHITE);
 		fittestTextArea.setEditable(false);
-		fittestTextArea.setBounds(10, 660, 948, 204);
+		fittestTextArea.setBounds(10, 638, 1208, 296);
 		frame.getContentPane().add(fittestTextArea);
 		
-		JLabel lblFinalGenerationOutput = new JLabel("Final Generation Output:");
+		JLabel lblFinalGenerationOutput = new JLabel("Algorithm Summary Output:");
 		lblFinalGenerationOutput.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblFinalGenerationOutput.setBounds(15, 613, 262, 41);
+		lblFinalGenerationOutput.setBounds(10, 591, 298, 41);
 		frame.getContentPane().add(lblFinalGenerationOutput);
 		
 		
@@ -429,7 +429,7 @@ public class Algorithm_Control {
 			}
 		});		
 		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
-		startButton.setBounds(810, 602, 148, 52);
+		startButton.setBounds(1070, 591, 148, 41);
 		frame.getContentPane().add(startButton);
 		
 
