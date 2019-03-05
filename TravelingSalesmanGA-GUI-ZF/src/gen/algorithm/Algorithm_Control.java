@@ -27,10 +27,10 @@ import javax.swing.event.ChangeEvent;
 public class Algorithm_Control {
 	
 	//My Declarations
-	private double mutationRate = .01;
-	private int numPlaces = 50;
-    private int numGenerations = 100;
-    private int numPaths = 100;
+	private static double mutationRate = .01;
+	private static int numPlaces = 50;
+    private static int numGenerations = 100;
+    private static int numPaths = 200;
     
     private boolean rouletteStyle = true;
     private boolean tourneyStyle = false;
@@ -94,8 +94,11 @@ public class Algorithm_Control {
 		JRadioButton rdbtnRouletteStyle = new JRadioButton("Roulette Style");
 		rdbtnRouletteStyle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				rouletteStyle = true;
-				tourneyStyle = false;
+				if (rdbtnRouletteStyle.isSelected())
+				{
+					rouletteStyle = true;
+					tourneyStyle = false;
+				}
 			}
 		});
 		selectionGroup.add(rdbtnRouletteStyle);
@@ -106,8 +109,11 @@ public class Algorithm_Control {
 		JRadioButton rdbtnTournamentStyle = new JRadioButton("Tournament Style");
 		rdbtnTournamentStyle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				tourneyStyle = true;
-				rouletteStyle = false;
+				if (rdbtnTournamentStyle.isSelected())
+				{
+					tourneyStyle = true;
+					rouletteStyle = false;
+				}
 			}
 		});
 		selectionGroup.add(rdbtnTournamentStyle);
@@ -153,8 +159,11 @@ public class Algorithm_Control {
 		JRadioButton rdbtnRandomSubset = new JRadioButton("Random Subset");
 		rdbtnRandomSubset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				randCross = true;
-				halfCross = false;
+				if (rdbtnRandomSubset.isSelected())
+				{
+					randCross = true;
+					halfCross = false;
+				}
 			}
 		});
 		crossGroup.add(rdbtnRandomSubset);
@@ -165,8 +174,11 @@ public class Algorithm_Control {
 		JRadioButton rdbtnHalf = new JRadioButton("Half Path Size");
 		rdbtnHalf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				randCross = false;
-				halfCross = true;
+				if (rdbtnHalf.isSelected())
+				{
+					randCross = false;
+					halfCross = true;
+				}
 			}
 		});
 		crossGroup.add(rdbtnHalf);
@@ -220,7 +232,7 @@ public class Algorithm_Control {
 		
 		Button startButton = new Button("Start Algorithm");
 		startButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {		
+			public void actionPerformed(ActionEvent arg0) {
 				
 				for (int i=0; i < numPlaces; i++)
 				{
@@ -242,12 +254,16 @@ public class Algorithm_Control {
 			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
 			    	
 			    }
-			    
+			    System.out.println("Generation " + gen + ":" );
 		        System.out.println("Final Path Length: " + initPop.getTopFitPath().calcPathDistance());
 		        System.out.println("Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness());
 		        System.out.println("Final Path:");
 		        System.out.println(initPop.getTopFitPath().toString());
 		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
+		        System.out.println("Final Pop Size: " + initPop.getPopSize());
+		        System.out.println(mutationRate);
+		        //numPlaces was compounding on subsequent executions of the algorithm so this was put here to solve that issue.
+		        numPlaces = numPlaces - numPlaces;
 			}
 		});
 		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));

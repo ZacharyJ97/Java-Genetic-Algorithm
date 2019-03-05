@@ -19,7 +19,7 @@ public class Algorithm {
 	//Static variables for the population size, mutation rate default, and default tournament pool size
 	public static int popSize;
 	private static double m_rate = .1;
-	private static int tournPool = (popSize / 2);
+	private static int tournPool;
 	
 	
 	//Crossover methods like this can be found described here https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_crossover.htm
@@ -250,6 +250,7 @@ public class Algorithm {
 	 */
 	private static Path tourneyStyleSelection(Population p)
 	{
+		tournPool = (p.getPopSize() / 2);
 		//Create a population to hold our tournament contestants, sized at half a population by default
 		Population t1 = new Population(tournPool,null, false);
 		//Contestants are chosen at random
