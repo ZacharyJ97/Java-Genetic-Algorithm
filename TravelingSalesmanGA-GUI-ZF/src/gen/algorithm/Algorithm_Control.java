@@ -24,13 +24,20 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+/**
+ * This class contains the auto code generated for Java GUI components but then also the main algorithm execution with the selected options
+ * Variables contained are the mutation, number of objects, and booleans to control the chosen operators
+ * 
+ * @author copyright Zachary Fitzpatrick, 2019.
+ * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
+ */
 public class Algorithm_Control {
 	
 	//My Declarations
-	private static double mutationRate = .01;
+	private static double mutationRate = .005;
 	private static int numPlaces = 50;
     private static int numGenerations = 100;
-    private static int numPaths = 200;
+    private static int numPaths = 100;
     
     private boolean rouletteStyle = true;
     private boolean tourneyStyle = false;
@@ -38,7 +45,6 @@ public class Algorithm_Control {
     private boolean halfCross = false;
     private boolean swapMutate = true;
 
-	
 
 	private JFrame frame;
 	private final Action action = new SwingAction();
@@ -121,14 +127,54 @@ public class Algorithm_Control {
 		selectionPanel.add(rdbtnTournamentStyle);
 		
 		JComboBox numGenerationCB = new JComboBox();
+		numGenerationCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (numGenerationCB.getSelectedIndex() == 0)
+				{
+					numGenerations = 100;
+				}
+				else if (numGenerationCB.getSelectedIndex() == 1)
+				{
+					numGenerations = 500;
+				}
+				else if (numGenerationCB.getSelectedIndex() == 2)
+				{
+					numGenerations = 1000;
+				}
+				else 
+				{
+					numGenerations = 2000;
+				}
+			}
+		});
 		numGenerationCB.setBackground(Color.WHITE);
 		numGenerationCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		numGenerationCB.setMaximumRowCount(3);
-		numGenerationCB.setModel(new DefaultComboBoxModel(new String[] {"100 Generations", "500 Generations", "1000 Generations"}));
+		numGenerationCB.setMaximumRowCount(4);
+		numGenerationCB.setModel(new DefaultComboBoxModel(new String[] {"100 Generations", "500 Generations", "1000 Generations", "2000 Generations"}));
 		numGenerationCB.setBounds(737, 124, 221, 34);
 		frame.getContentPane().add(numGenerationCB);
 		
 		JComboBox numPlacesCB = new JComboBox();
+		numPlacesCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (numPlacesCB.getSelectedIndex() == 0)
+				{
+					numPlaces = 50;
+				}
+				else if (numPlacesCB.getSelectedIndex() == 1)
+				{
+					numPlaces = 100;
+				}
+				else if (numPlacesCB.getSelectedIndex() == 2)
+				{
+					numPlaces = 150;
+				}
+				else
+				{
+					numPlaces = 200;
+				}
+			}
+		});
 		numPlacesCB.setBackground(Color.WHITE);
 		numPlacesCB.setModel(new DefaultComboBoxModel(new String[] {"50 Places on Map", "100 Places on Map", "150 Places on Map", "200 Places on Map"}));
 		numPlacesCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -137,6 +183,22 @@ public class Algorithm_Control {
 		frame.getContentPane().add(numPlacesCB);
 		
 		JComboBox populationSizeCB = new JComboBox();
+		populationSizeCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (populationSizeCB.getSelectedIndex() == 0)
+				{
+					numPaths = 100;
+				}
+				else if (populationSizeCB.getSelectedIndex() == 1)
+				{
+					numPaths = 200;
+				}
+				else
+				{
+					numPaths = 300;
+				}
+			}
+		});
 		populationSizeCB.setBackground(Color.WHITE);
 		populationSizeCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		populationSizeCB.setModel(new DefaultComboBoxModel(new String[] {"100 Paths in Population", "200 Paths in Population", "300 Paths in Population"}));
@@ -262,21 +324,51 @@ public class Algorithm_Control {
 		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
 		        System.out.println("Final Pop Size: " + initPop.getPopSize());
 		        System.out.println(mutationRate);
-		        //numPlaces was compounding on subsequent executions of the algorithm so this was put here to solve that issue.
-		        numPlaces = numPlaces - numPlaces;
+		        System.out.println(numGenerations);
+		        //Had to do his to prevent number of places compounding for each consecutive algorithm start
+		        Path.GetMap().clear();
+
+		        
+		        /*for (int index = 0; index < initPop.getPopSize(); index++)
+		        {
+		        	System.out.println(initPop.getPathFromPop(index));
+		        	
+		        }*/
 			}
 		});
+		
+		
 		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
 		startButton.setBounds(810, 602, 148, 52);
 		frame.getContentPane().add(startButton);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {".01 Mutation Rate", ".05 Mutation Rate", ".1 Mutation Rate", ".2 Mutation Rate"}));
-		comboBox.setMaximumRowCount(3);
-		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		comboBox.setBackground(Color.WHITE);
-		comboBox.setBounds(737, 174, 221, 34);
-		frame.getContentPane().add(comboBox);
+		JComboBox mutationRateCB = new JComboBox();
+		mutationRateCB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (mutationRateCB.getSelectedIndex() == 0)
+				{
+					mutationRate = .005;
+				}
+				else if (mutationRateCB.getSelectedIndex() == 1)
+				{
+					mutationRate = .01;
+				}
+				else if (mutationRateCB.getSelectedIndex() == 2)
+				{
+					mutationRate = .05;
+				}
+				else 
+				{
+					mutationRate = .1;
+				}
+			}
+		});
+		mutationRateCB.setModel(new DefaultComboBoxModel(new String[] {".005 Mutation Rate", ".01 Mutation Rate", ".05 Mutation Rate", ".1 Mutation Rate"}));
+		mutationRateCB.setMaximumRowCount(4);
+		mutationRateCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		mutationRateCB.setBackground(Color.WHITE);
+		mutationRateCB.setBounds(737, 174, 221, 34);
+		frame.getContentPane().add(mutationRateCB);
 	}
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {

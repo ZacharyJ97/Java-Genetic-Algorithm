@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author copyright Zachary Fitzpatrick, 2019
- * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
+ * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
  *
  *Manages a path through all the places contained in a map.
  * Characterized by a beginning point, visiting all places once, and then

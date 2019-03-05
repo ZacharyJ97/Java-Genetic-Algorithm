@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author copyright Zachary Fitzpatrick, 2019.
- * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
+ * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
  *
  * Population will manage our sets of paths as potential solutions
  */

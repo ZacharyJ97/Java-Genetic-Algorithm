@@ -4,7 +4,7 @@ import java.util.*;
 /**
  * Handles performing the operations of a genetic algorithm, such as selection, crossover, mutation, etc
  * @author copyright Zachary Fitzpatrick, 2019
- *Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
+ *Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
  */
 public class Algorithm {
 	//Booleans for option selection in each operator of Selection, Crossover, Mutation
@@ -115,6 +115,7 @@ public class Algorithm {
 			}
 			System.out.println("Used Half Path Crossover");
 		}
+		return resultChild;
 		
 		
 		//This code was an attempt to use uniform crossover but it does not work well with TSP due to duplicates
@@ -152,7 +153,6 @@ public class Algorithm {
 			}
 		}*/
 		
-		return resultChild;
 	}
 	
 	//Mutation function options based on swap mutation and scramble subset mutation as detailed in: https://www.geeksforgeeks.org/mutation-algorithms-for-string-manipulation-ga/

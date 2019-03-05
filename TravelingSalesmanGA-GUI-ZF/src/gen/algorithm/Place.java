@@ -3,7 +3,7 @@ import java.util.*;
 
 /**
  * @author copyright Zachary Fitzpatrick, 2019.
- * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program.
+ * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
  * 
  * Place signifies a stop on our path and the characteristics that define it.
  * Except for manual Place creation, automatic (parameter-less constructor) randomly generates x and y positions from 1-500
