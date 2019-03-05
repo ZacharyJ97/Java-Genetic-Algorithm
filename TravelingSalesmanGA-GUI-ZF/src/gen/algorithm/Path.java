@@ -30,6 +30,8 @@ public class Path {
     private double totalDistance;
     private double placeDistance;
     
+    public DecimalFormat df = new DecimalFormat("###");
+    
     /**
      * 
      * Path is decidedly filled with nulls according to the map size that becomes useful in content checks later for crossover
@@ -63,11 +65,10 @@ public class Path {
      */
     public String toString()
     {
-    	DecimalFormat df = new DecimalFormat("###.##");
     	String path = "(";
     	for (Place p : travelPath)
     	{
-    		path += p.getName() + " at X: " + df.format(p.getX()) + " and Y: " + df.format(p.getY()) + ") (";
+    		path += p.getName() + " at " + df.format(p.getX()) + "," + df.format(p.getY()) + ") (";
     	}
     	return path;
     }

@@ -20,6 +20,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.beans.PropertyChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
@@ -45,6 +46,8 @@ public class Algorithm_Control {
     private boolean randCross = true;
     private boolean halfCross = false;
     private boolean swapMutate = true;
+    
+    public DecimalFormat df = new DecimalFormat("###.##");
     
 	public String buttonToString(JRadioButton rb)
 	{
@@ -106,6 +109,7 @@ public class Algorithm_Control {
 		frame.getContentPane().add(selectionPanel);
 		
 		JRadioButton rdbtnRouletteStyle = new JRadioButton("Roulette Style");
+		rdbtnRouletteStyle.setActionCommand("Roulette Selection");
 		rdbtnRouletteStyle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnRouletteStyle.isSelected())
@@ -121,6 +125,7 @@ public class Algorithm_Control {
 		selectionPanel.add(rdbtnRouletteStyle);
 		
 		JRadioButton rdbtnTournamentStyle = new JRadioButton("Tournament Style");
+		rdbtnTournamentStyle.setActionCommand("Tournament Selection");
 		rdbtnTournamentStyle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnTournamentStyle.isSelected())
@@ -140,18 +145,22 @@ public class Algorithm_Control {
 				if (numGenerationCB.getSelectedIndex() == 0)
 				{
 					numGenerations = 100;
+					numGenerationCB.setActionCommand("100 Generations");
 				}
 				else if (numGenerationCB.getSelectedIndex() == 1)
 				{
 					numGenerations = 500;
+					numGenerationCB.setActionCommand("500 Generations");
 				}
 				else if (numGenerationCB.getSelectedIndex() == 2)
 				{
 					numGenerations = 1000;
+					numGenerationCB.setActionCommand("1000 Generations");
 				}
 				else 
 				{
 					numGenerations = 2000;
+					numGenerationCB.setActionCommand("2000 Generations");
 				}
 			}
 		});
@@ -168,18 +177,22 @@ public class Algorithm_Control {
 				if (numPlacesCB.getSelectedIndex() == 0)
 				{
 					numPlaces = 50;
+					numPlacesCB.setActionCommand("50 places were on the map.");
 				}
 				else if (numPlacesCB.getSelectedIndex() == 1)
 				{
 					numPlaces = 100;
+					numPlacesCB.setActionCommand("100 places were on the map.");
 				}
 				else if (numPlacesCB.getSelectedIndex() == 2)
 				{
 					numPlaces = 150;
+					numPlacesCB.setActionCommand("150 places were on the map.");
 				}
 				else
 				{
 					numPlaces = 200;
+					numPlacesCB.setActionCommand("200 places were on the map.");
 				}
 			}
 		});
@@ -196,14 +209,17 @@ public class Algorithm_Control {
 				if (populationSizeCB.getSelectedIndex() == 0)
 				{
 					numPaths = 100;
+					populationSizeCB.setActionCommand("100 paths were in the population.");
 				}
 				else if (populationSizeCB.getSelectedIndex() == 1)
 				{
 					numPaths = 200;
+					populationSizeCB.setActionCommand("200 paths were in the population.");
 				}
 				else
 				{
 					numPaths = 300;
+					populationSizeCB.setActionCommand("300 paths were in the population.");
 				}
 			}
 		});
@@ -227,6 +243,7 @@ public class Algorithm_Control {
 		frame.getContentPane().add(crossoverPanel);
 		
 		JRadioButton rdbtnRandomSubset = new JRadioButton("Random Subset");
+		rdbtnRandomSubset.setActionCommand("Random Subset Crossover");
 		rdbtnRandomSubset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnRandomSubset.isSelected())
@@ -242,6 +259,7 @@ public class Algorithm_Control {
 		crossoverPanel.add(rdbtnRandomSubset);
 		
 		JRadioButton rdbtnHalf = new JRadioButton("Half Path Size");
+		rdbtnHalf.setActionCommand("Half Path Crossover");
 		rdbtnHalf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnHalf.isSelected())
@@ -268,6 +286,7 @@ public class Algorithm_Control {
 		frame.getContentPane().add(mutationPanel);
 		
 		JRadioButton rdbtnSwapMutation = new JRadioButton("Swap Mutation");
+		rdbtnSwapMutation.setActionCommand("Swap Mutation");
 		rdbtnSwapMutation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnSwapMutation.isSelected())
@@ -283,6 +302,7 @@ public class Algorithm_Control {
 		mutationPanel.add(rdbtnSwapMutation);
 		
 		JRadioButton rdbtnScrambleSubset = new JRadioButton("Scramble Subset");
+		rdbtnScrambleSubset.setActionCommand("Scramble Subset Mutation");
 		rdbtnScrambleSubset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (rdbtnScrambleSubset.isSelected())
@@ -306,18 +326,22 @@ public class Algorithm_Control {
 				if (mutationRateCB.getSelectedIndex() == 0)
 				{
 					mutationRate = .005;
+					mutationRateCB.setActionCommand("The mutation rate was .005");
 				}
 				else if (mutationRateCB.getSelectedIndex() == 1)
 				{
 					mutationRate = .01;
+					mutationRateCB.setActionCommand("The mutation rate was .01");
 				}
 				else if (mutationRateCB.getSelectedIndex() == 2)
 				{
 					mutationRate = .05;
+					mutationRateCB.setActionCommand("The mutation rate was .05");
 				}
 				else 
 				{
 					mutationRate = .1;
+					mutationRateCB.setActionCommand("The mutation rate was .1");
 				}
 			}
 		});
@@ -350,9 +374,9 @@ public class Algorithm_Control {
 					Path.GetMap().add(place);
 				}
 				//Getting selected options for textual output
-				JRadioButton select = (JRadioButton)selectionGroup.getSelection();
-				JRadioButton cross = (JRadioButton)crossGroup.getSelection();
-				JRadioButton mut = (JRadioButton)mutateGroup.getSelection();
+				String select = selectionGroup.getSelection().getActionCommand();
+				String cross =crossGroup.getSelection().getActionCommand();
+				String mut = mutateGroup.getSelection().getActionCommand();
 			    
 				//Resetting top text area for each start algorithm
 				generationsTextArea.setText(null);
@@ -362,25 +386,29 @@ public class Algorithm_Control {
 			    Population initPop = new Population(numPaths,null,true);
 			    
 			    //Text Output for GUI
-			    generationsTextArea.append("Initial Population" + "\n" + "Initial Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
-			    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness()
+			    generationsTextArea.append("Initial Population" + "\n" + "Initial Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
+			    		"Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		);
-			    fittestTextArea.append("\n" + "Algorithm #" + algorithmCount + " used " + buttonToString(select) + " with " + buttonToString(cross)+ " and " + buttonToString(mut) + "\n");
-			    fittestTextArea.append("\n" + "Initial Population" + "\n" + "Initial Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
-			    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n"
+			    fittestTextArea.append("\n" + "Algorithm #" + algorithmCount + " used " + select + " with " + cross + " and " + mut + ". \n");
+			    fittestTextArea.append("\n" + "Initial Population" + "\n" + "Initial Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
+			    		"Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		);
 			    
 			    //Evolve Population
 			    for (gen = 0; gen < numGenerations; gen++)
 			    {
 			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
-			    	generationsTextArea.append("\n \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
-				    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n" + "Number of Places in Path: " + initPop.getTopFitPath().PathSize()
+			    	
+			    	generationsTextArea.append(" \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
+				    		"Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 				    		);
 			    	
 			    }
-			    fittestTextArea.append("\n" + "Final Generation:" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
-			    		"Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n"
+			    fittestTextArea.append("\nThis algorithm ran for " + numGenerations + " generations and had " + numPlaces + " places within each path, " + numPaths + " paths in the population, and a mutation rate of "
+			    		+ mutationRate + ". \n");
+			    
+			    fittestTextArea.append("\n" + "Final Generation:" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
+			    		"Final Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		+ "Final Path: " + initPop.getTopFitPath().toString() + "\n"
 			    		);
 		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
