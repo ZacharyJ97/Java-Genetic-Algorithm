@@ -33,17 +33,24 @@ import javax.swing.event.ChangeEvent;
  */
 public class Algorithm_Control {
 	
-	//My Declarations
+	//My Declarations and toString method
 	private static double mutationRate = .005;
 	private static int numPlaces = 50;
     private static int numGenerations = 100;
     private static int numPaths = 100;
+    private static int algorithmCount = 1;
     
     private boolean rouletteStyle = true;
     private boolean tourneyStyle = false;
     private boolean randCross = true;
     private boolean halfCross = false;
     private boolean swapMutate = true;
+    
+	public String buttonToString(JRadioButton rb)
+	{
+		String label = rb.getText();
+		return label;
+	}
 
 
 	private JFrame frame;
@@ -333,24 +340,37 @@ public class Algorithm_Control {
 		lblFinalGenerationOutput.setBounds(15, 613, 262, 41);
 		frame.getContentPane().add(lblFinalGenerationOutput);
 		
+		
 		Button startButton = new Button("Start Algorithm");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				for (int i=0; i < numPlaces; i++)
 				{
 					Place place = new Place();
 					Path.GetMap().add(place);
 				}
+				//Getting selected options for textual output
+				JRadioButton select = (JRadioButton)selectionGroup.getSelection();
+				JRadioButton cross = (JRadioButton)crossGroup.getSelection();
+				JRadioButton mut = (JRadioButton)mutateGroup.getSelection();
 			    
+				//Resetting top text area for each start algorithm
+				generationsTextArea.setText(null);
+				
 				int gen = 0;
 				
 			    Population initPop = new Population(numPaths,null,true);
-			    generationsTextArea.append("Initial Population: " + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+			    
+			    //Text Output for GUI
+			    generationsTextArea.append("Initial Population" + "\n" + "Initial Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
 			    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness()
 			    		);
+			    fittestTextArea.append("\n" + "Algorithm #" + algorithmCount + " used " + buttonToString(select) + " with " + buttonToString(cross)+ " and " + buttonToString(mut) + "\n");
+			    fittestTextArea.append("\n" + "Initial Population" + "\n" + "Initial Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+			    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n"
+			    		);
 			    
-			    initPop = Algorithm.generateNewPop(initPop, randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
+			    //Evolve Population
 			    for (gen = 0; gen < numGenerations; gen++)
 			    {
 			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
@@ -359,7 +379,7 @@ public class Algorithm_Control {
 				    		);
 			    	
 			    }
-			    fittestTextArea.append("Final Generation" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+			    fittestTextArea.append("\n" + "Final Generation:" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
 			    		"Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n"
 			    		+ "Final Path: " + initPop.getTopFitPath().toString() + "\n"
 			    		);
@@ -367,8 +387,10 @@ public class Algorithm_Control {
 		        System.out.println("Final Pop Size: " + initPop.getPopSize());
 		        System.out.println(mutationRate);
 		        System.out.println(numGenerations);
+		        
 		        //Had to do his to prevent number of places compounding for each consecutive algorithm start
 		        Path.GetMap().clear();
+		        algorithmCount++;
 
 		        
 		        /*for (int index = 0; index < initPop.getPopSize(); index++)
