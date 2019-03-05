@@ -1,5 +1,6 @@
 package gen.algorithm;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 /**
@@ -62,10 +63,11 @@ public class Path {
      */
     public String toString()
     {
+    	DecimalFormat df = new DecimalFormat("###.##");
     	String path = "(";
     	for (Place p : travelPath)
     	{
-    		path += p.getName() + " at X: " + p.getX() + " and Y: " + p.getY() + ") (";
+    		path += p.getName() + " at X: " + df.format(p.getX()) + " and Y: " + df.format(p.getY()) + ") (";
     	}
     	return path;
     }

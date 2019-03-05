@@ -85,7 +85,7 @@ public class Algorithm_Control {
 		frame.getContentPane().setLayout(null);
 		
 		TextArea generationsTextArea = new TextArea();
-		generationsTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+		generationsTextArea.setFont(new Font("Arial", Font.PLAIN, 16));
 		generationsTextArea.setBackground(Color.WHITE);
 		generationsTextArea.setEditable(false);
 		generationsTextArea.setBounds(10, 10, 721, 586);
@@ -359,7 +359,7 @@ public class Algorithm_Control {
 				    		);
 			    	
 			    }
-			    fittestTextArea.append("Final Generation " + ":" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+			    fittestTextArea.append("Final Generation" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
 			    		"Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n"
 			    		+ "Final Path: " + initPop.getTopFitPath().toString() + "\n"
 			    		);
