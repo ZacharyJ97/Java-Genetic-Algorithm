@@ -26,7 +26,7 @@ import javax.swing.event.ChangeEvent;
 
 /**
  * This class contains the auto code generated for Java GUI components but then also the main algorithm execution with the selected options
- * Variables contained are the mutation, number of objects, and booleans to control the chosen operators
+ * Variables contained are the mutation, number of objects, and booleans to control the chosen operators. Main executing code found at bottom of class under the start button
  * 
  * @author copyright Zachary Fitzpatrick, 2019.
  * Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
@@ -80,15 +80,16 @@ public class Algorithm_Control {
 	 */
 	private void initialize() {		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 995, 720);
+		frame.setBounds(100, 100, 995, 930);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		TextArea textArea = new TextArea();
-		textArea.setBackground(Color.WHITE);
-		textArea.setEditable(false);
-		textArea.setBounds(10, 10, 721, 644);
-		frame.getContentPane().add(textArea);
+		TextArea generationsTextArea = new TextArea();
+		generationsTextArea.setFont(new Font("Arial", Font.PLAIN, 14));
+		generationsTextArea.setBackground(Color.WHITE);
+		generationsTextArea.setEditable(false);
+		generationsTextArea.setBounds(10, 10, 721, 586);
+		frame.getContentPane().add(generationsTextArea);
 		
 		JPanel selectionPanel = new JPanel();
 		selectionPanel.setBorder(new LineBorder(Color.GRAY, 2, true));
@@ -292,56 +293,6 @@ public class Algorithm_Control {
 		lblMutationMethod.setBounds(737, 475, 148, 34);
 		frame.getContentPane().add(lblMutationMethod);
 		
-		Button startButton = new Button("Start Algorithm");
-		startButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				for (int i=0; i < numPlaces; i++)
-				{
-					Place place = new Place();
-					Path.GetMap().add(place);
-				}
-			    
-				int gen = 0;
-				
-			    Population initPop = new Population(numPaths,null,true);
-			    System.out.println("Generation " + gen + ":" );
-			    System.out.println("Best Path Length: " + initPop.getTopFitPath().calcPathDistance());
-			    System.out.println("Fitness Score: " + initPop.getTopFitPath().GetPathFitness());
-			    System.out.println("Number of Places in Path: " + initPop.getTopFitPath().PathSize());
-			    
-			    initPop = Algorithm.generateNewPop(initPop, randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
-			    for (gen = 0; gen < numGenerations; gen++)
-			    {
-			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
-			    	
-			    }
-			    System.out.println("Generation " + gen + ":" );
-		        System.out.println("Final Path Length: " + initPop.getTopFitPath().calcPathDistance());
-		        System.out.println("Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness());
-		        System.out.println("Final Path:");
-		        System.out.println(initPop.getTopFitPath().toString());
-		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
-		        System.out.println("Final Pop Size: " + initPop.getPopSize());
-		        System.out.println(mutationRate);
-		        System.out.println(numGenerations);
-		        //Had to do his to prevent number of places compounding for each consecutive algorithm start
-		        Path.GetMap().clear();
-
-		        
-		        /*for (int index = 0; index < initPop.getPopSize(); index++)
-		        {
-		        	System.out.println(initPop.getPathFromPop(index));
-		        	
-		        }*/
-			}
-		});
-		
-		
-		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
-		startButton.setBounds(810, 602, 148, 52);
-		frame.getContentPane().add(startButton);
-		
 		JComboBox mutationRateCB = new JComboBox();
 		mutationRateCB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -369,6 +320,69 @@ public class Algorithm_Control {
 		mutationRateCB.setBackground(Color.WHITE);
 		mutationRateCB.setBounds(737, 174, 221, 34);
 		frame.getContentPane().add(mutationRateCB);
+		
+		TextArea fittestTextArea = new TextArea();
+		fittestTextArea.setFont(new Font("Arial", Font.BOLD, 18));
+		fittestTextArea.setBackground(Color.WHITE);
+		fittestTextArea.setEditable(false);
+		fittestTextArea.setBounds(10, 660, 948, 204);
+		frame.getContentPane().add(fittestTextArea);
+		
+		JLabel lblFinalGenerationOutput = new JLabel("Final Generation Output:");
+		lblFinalGenerationOutput.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblFinalGenerationOutput.setBounds(15, 613, 262, 41);
+		frame.getContentPane().add(lblFinalGenerationOutput);
+		
+		Button startButton = new Button("Start Algorithm");
+		startButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				for (int i=0; i < numPlaces; i++)
+				{
+					Place place = new Place();
+					Path.GetMap().add(place);
+				}
+			    
+				int gen = 0;
+				
+			    Population initPop = new Population(numPaths,null,true);
+			    generationsTextArea.append("Initial Population: " + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+			    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness()
+			    		);
+			    
+			    initPop = Algorithm.generateNewPop(initPop, randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
+			    for (gen = 0; gen < numGenerations; gen++)
+			    {
+			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
+			    	generationsTextArea.append("\n \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+				    		"Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n" + "Number of Places in Path: " + initPop.getTopFitPath().PathSize()
+				    		);
+			    	
+			    }
+			    fittestTextArea.append("Final Generation " + ":" + "\n" + "Best Path Length: " + initPop.getTopFitPath().calcPathDistance() + "\n" +
+			    		"Final Fitness Score: " + initPop.getTopFitPath().GetPathFitness() + "\n"
+			    		+ "Final Path: " + initPop.getTopFitPath().toString() + "\n"
+			    		);
+		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
+		        System.out.println("Final Pop Size: " + initPop.getPopSize());
+		        System.out.println(mutationRate);
+		        System.out.println(numGenerations);
+		        //Had to do his to prevent number of places compounding for each consecutive algorithm start
+		        Path.GetMap().clear();
+
+		        
+		        /*for (int index = 0; index < initPop.getPopSize(); index++)
+		        {
+		        	System.out.println(initPop.getPathFromPop(index));
+		        	
+		        }*/
+			}
+		});		
+		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
+		startButton.setBounds(810, 602, 148, 52);
+		frame.getContentPane().add(startButton);
+		
+
 	}
 	private class SwingAction extends AbstractAction {
 		public SwingAction() {
