@@ -2,6 +2,18 @@ package gen.algorithm;
 
 import java.awt.EventQueue;
 
+import org.jfree.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
+import org.jfree.data.xy.DefaultXYDataset;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import javax.swing.JFrame;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
@@ -41,6 +53,11 @@ public class Algorithm_Control {
     private static int numPaths = 100;
     private static int algorithmCount = 1;
     
+    JFrame chartFrame = new JFrame("Fittest Per Generation Chart");
+    private ChartPanel cp;
+    private XYLineAndShapeRenderer render = new XYLineAndShapeRenderer();
+    
+    
     private boolean rouletteStyle = true;
     private boolean tourneyStyle = false;
     private boolean randCross = true;
@@ -48,7 +65,7 @@ public class Algorithm_Control {
     private boolean swapMutate = true;
     
     public DecimalFormat df = new DecimalFormat("###.##");
-    
+    public DecimalFormat df2 = new DecimalFormat("###.####");
 	public String buttonToString(JRadioButton rb)
 	{
 		String label = rb.getText();
@@ -90,9 +107,14 @@ public class Algorithm_Control {
 	 */
 	private void initialize() {		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1250, 1000);
+		frame.setBounds(0, 0, 1250, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		
+		//Charting code
+		chartFrame.setBounds(200, 30, 800, 600);
+		chartFrame.getContentPane().setLayout(null);
+        
 		
 		TextArea generationsTextArea = new TextArea();
 		generationsTextArea.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -107,6 +129,7 @@ public class Algorithm_Control {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		selectionPanel.setBounds(997, 252, 221, 82);
 		frame.getContentPane().add(selectionPanel);
+		
 		
 		JRadioButton rdbtnRouletteStyle = new JRadioButton("Roulette Style");
 		rdbtnRouletteStyle.setActionCommand("Roulette Selection");
@@ -380,35 +403,35 @@ public class Algorithm_Control {
 			    
 				//Resetting top text area for each start algorithm
 				generationsTextArea.setText(null);
-				
+
 				int gen = 0;
 				
 			    Population initPop = new Population(numPaths,null,true);
-			    
 			    //Text Output for GUI
 			    generationsTextArea.append("Initial Population" + "\n" + "Initial Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
-			    		"Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
+			    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		);
 			    fittestTextArea.append("\n" + "Algorithm #" + algorithmCount + " used " + select + " with " + cross + " and " + mut + ". \n");
 			    fittestTextArea.append("\n" + "Initial Population" + "\n" + "Initial Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
-			    		"Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
+			    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		);
-			    
+
 			    //Evolve Population
 			    for (gen = 0; gen < numGenerations; gen++)
 			    {
 			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
 			    	
-			    	generationsTextArea.append(" \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
-				    		"Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
-				    		);
 			    	
+			    	generationsTextArea.append(" \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
+				    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
+				    		);
+
 			    }
 			    fittestTextArea.append("\nThis algorithm ran for " + numGenerations + " generations and had " + numPlaces + " places within each path, " + numPaths + " paths in the population, and a mutation rate of "
 			    		+ mutationRate + ". \n");
 			    
 			    fittestTextArea.append("\n" + "Final Generation:" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
-			    		"Final Fitness Score: " + df.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
+			    		"Final Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		+ "Final Path: " + initPop.getTopFitPath().toString() + "\n"
 			    		);
 		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
@@ -419,7 +442,26 @@ public class Algorithm_Control {
 		        //Had to do his to prevent number of places compounding for each consecutive algorithm start
 		        Path.GetMap().clear();
 		        algorithmCount++;
+		        
+		        
+		        /*Charting code found at: https://www.tutorialspoint.com/jfreechart/jfreechart_xy_chart.htm
+		        JFreeChart is a GNU Open Resource Library of charting and graphing functionalities for the Java language*/
+		        /*DefaultXYDataset dataset = new DefaultXYDataset();
+		        dataset.addSeries("Path Length", data);
+		        
+		        JFreeChart xylineChart = ChartFactory.createXYLineChart("Fittest Distance Per Generation", "Generation", "Fittest Path Length", dataset, PlotOrientation.VERTICAL,true,true,false);
+		        cp = new ChartPanel(xylineChart);
+		        //final XYPlot plot = xylineChart.getXYPlot();
+		        //render.setSeriesPaint(0,Color.GREEN);
+		        //plot.setRenderer(render);
+		        chartFrame.setVisible(true);
+		        cp.setVisible(true);
+		        chartFrame.getContentPane().add(cp);*/
+		        
+		        
 
+		        
+		        
 		        
 		        /*for (int index = 0; index < initPop.getPopSize(); index++)
 		        {
