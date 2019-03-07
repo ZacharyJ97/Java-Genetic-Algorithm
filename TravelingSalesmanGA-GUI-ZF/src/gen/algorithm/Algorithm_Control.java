@@ -51,12 +51,7 @@ public class Algorithm_Control {
 	private static int numPlaces = 50;
     private static int numGenerations = 100;
     private static int numPaths = 100;
-    private static int algorithmCount = 1;
-    
-    JFrame chartFrame = new JFrame("Fittest Per Generation Chart");
-    private ChartPanel cp;
-    private XYLineAndShapeRenderer render = new XYLineAndShapeRenderer();
-    
+    private static int algorithmCount = 1;    
     
     private boolean rouletteStyle = true;
     private boolean tourneyStyle = false;
@@ -109,11 +104,7 @@ public class Algorithm_Control {
 		frame = new JFrame();
 		frame.setBounds(0, 0, 1250, 1000);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		JFrame frame2 = new JFrame("Charts");
-		frame2.setBounds(200, 30, 800, 600);
-        
+		frame.getContentPane().setLayout(null);        
         
 		
 		TextArea generationsTextArea = new TextArea();
@@ -406,9 +397,12 @@ public class Algorithm_Control {
 		Button startButton = new Button("Start Algorithm");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				frame2.setVisible(false);
 				
-				DefaultXYDataset ds = new DefaultXYDataset();
+				/*Charting provided by JFreeChart Library and code from https://www.tutorialspoint.com/jfreechart/jfreechart_xy_chart.htm*/
+				JFrame frame2 = new JFrame("Charted Algorithm " + algorithmCount);
+				frame2.setBounds(200, 30, 1200, 1000);
+				frame2.setVisible(false);
+				////////////////////////////////////////
 				
 				for (int i=0; i < numPlaces; i++)
 				{
@@ -423,10 +417,9 @@ public class Algorithm_Control {
 			    
 				//Resetting top text area for each start algorithm
 				generationsTextArea.setText(null);
-
-				int gen = 0;
-				
+				//Beginning Population
 			    Population initPop = new Population(numPaths,null,true);
+			    
 			    //Text Output for GUI
 			    generationsTextArea.append("Initial Population" + "\n" + "Initial Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
 			    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
@@ -435,21 +428,26 @@ public class Algorithm_Control {
 			    fittestTextArea.append("\n" + "Initial Population" + "\n" + "Initial Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
 			    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		);
+			    //////////////////////////////////////
 
+			    int gen = 0;
+			    //Charting variables
+			    XYSeriesCollection dataset = new XYSeriesCollection();
+			    XYSeries genFit = new XYSeries("Best Path Length Per Generation");
+			    
 			    //Evolve Population
 			    for (gen = 0; gen < numGenerations; gen++)
 			    {
 			    	initPop = Algorithm.generateNewPop(initPop,randCross, halfCross, tourneyStyle, rouletteStyle, swapMutate, mutationRate);
 			    	
-			    	
+			    	//Output Text
 			    	generationsTextArea.append(" \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
 				    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 				    		);
+			    	genFit.add(gen, initPop.getTopFitPath().calcPathDistance());
 			    	
-			    	double[][] data = { {gen}, {initPop.getTopFitPath().calcPathDistance()} };
-			    	ds.addSeries("Best Path Length per Generation", data);
-
 			    }
+			    //Output text
 			    fittestTextArea.append("\nThis algorithm ran for " + numGenerations + " generations and had " + numPlaces + " places within each path, " + numPaths + " paths in the population, and a mutation rate of "
 			    		+ mutationRate + ". \n");
 			    
@@ -457,6 +455,8 @@ public class Algorithm_Control {
 			    		"Final Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 			    		+ "Final Path: " + initPop.getTopFitPath().toString() + "\n"
 			    		);
+			    //////////////
+			    
 		        System.out.println("Final Path Size: " + initPop.getTopFitPath().PathSize());
 		        System.out.println("Final Pop Size: " + initPop.getPopSize());
 		        System.out.println(mutationRate);
@@ -466,40 +466,19 @@ public class Algorithm_Control {
 		        Path.GetMap().clear();
 		        algorithmCount++;
 		        
-                
-                JFreeChart chart = ChartFactory.createXYLineChart("Test Chart",
-                        "Generation", "Best Path Length", ds, PlotOrientation.VERTICAL, true, true,
+		        //Lastly, charting the data
+		        dataset.addSeries(genFit);
+                JFreeChart chart = ChartFactory.createXYLineChart("Path Length over Generations",
+                        "Generation", "Best Path Length", dataset, PlotOrientation.VERTICAL, true, true,
                         false);
 
                 ChartPanel cp = new ChartPanel(chart);
                 frame2.getContentPane().add(cp);
-                
                 frame2.setVisible(true);
 		        
 		        /*Charting code found at: https://www.tutorialspoint.com/jfreechart/jfreechart_xy_chart.htm
 		        JFreeChart is a GNU Open Resource Library of charting and graphing functionalities for the Java language*/
-		        /*DefaultXYDataset dataset = new DefaultXYDataset();
-		        dataset.addSeries("Path Length", data);
 		        
-		        JFreeChart xylineChart = ChartFactory.createXYLineChart("Fittest Distance Per Generation", "Generation", "Fittest Path Length", dataset, PlotOrientation.VERTICAL,true,true,false);
-		        cp = new ChartPanel(xylineChart);
-		        //final XYPlot plot = xylineChart.getXYPlot();
-		        //render.setSeriesPaint(0,Color.GREEN);
-		        //plot.setRenderer(render);
-		        chartFrame.setVisible(true);
-		        cp.setVisible(true);
-		        chartFrame.getContentPane().add(cp);*/
-		        
-		        
-
-		        
-		        
-		        
-		        /*for (int index = 0; index < initPop.getPopSize(); index++)
-		        {
-		        	System.out.println(initPop.getPathFromPop(index));
-		        	
-		        }*/
 			}
 		});		
 		startButton.setFont(new Font("Dialog", Font.PLAIN, 18));
