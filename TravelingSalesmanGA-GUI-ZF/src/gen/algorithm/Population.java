@@ -63,10 +63,11 @@ public class Population {
      * Function meant to sort a population of paths by fittest paths near the front and least fit near the end
      */
     public void sortPopByFittest() {
+    	int index2 = 1;
     	for (Path p : popPaths)
     	{
     		Path next = new Path();
-			int index2 = 1;
+			
 			if (index2 < popPaths.size())
 			{
 				next = popPaths.get(index2);

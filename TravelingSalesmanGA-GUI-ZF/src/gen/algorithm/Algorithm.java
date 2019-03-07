@@ -3,7 +3,8 @@ import java.util.*;
 
 /**
  * Handles performing the operations of a genetic algorithm, such as selection, crossover, mutation, etc
- * @author copyright Zachary Fitzpatrick, 2019
+ * @author copyright Zachary Fitzpatrick, 2019.
+ * 
  *Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
  */
 public class Algorithm {
@@ -78,7 +79,7 @@ public class Algorithm {
 					}
 				}
 			}
-			System.out.println("Used Random Crossover");
+			//System.out.println("Used Random Crossover");
 		}
 		
 		//Half the entire path crossover method
@@ -113,7 +114,7 @@ public class Algorithm {
 					}
 				}
 			}
-			System.out.println("Used Half Path Crossover");
+			//System.out.println("Used Half Path Crossover");
 		}
 		return resultChild;
 		
@@ -168,29 +169,30 @@ public class Algorithm {
 		m_rate = rate;
 		double rand = Math.random();
 		
+		Random rpos1 = new Random();
+		Random rpos2 = new Random();
+		
 		//If swap mutation is to be used
-		if (swap == true) 
+		if (swap == true && rand < m_rate) 
 		{
-			//Random Swap mutation checking at each Place in the path
-			for(int i = 0; i < p.PathSize(); i++)
+			int pos1 = rpos1.nextInt((int)p.PathSize());
+			int pos2 = rpos2.nextInt((int)p.PathSize());
+			while (pos1 == pos2)
 			{
-				//Has our random number generated something less than our mutation rate?
-				if (rand < m_rate)
-				{
-					//Grab the place we were looking at and a random place
-					Place n1 = p.GetPlaceFromPath(i);
-					int rand2 = new Random().nextInt((int)p.PathSize());
-					Place n2 = p.GetPlaceFromPath(rand2);
-					
-					//Swap those two places
-					p.addPlaceToPath(rand2, n1);
-					p.addPlaceToPath(i, n2);
-					
-				}
-				rand = Math.random();
-					
+				pos2 = rpos2.nextInt((int)p.PathSize());
 			}
+			
+			//Grab the Places at those two random integers
+			Place n1 = p.GetPlaceFromPath(pos1);
+			Place n2 = p.GetPlaceFromPath(pos2);
+			
+			//Swap those two places
+			p.addPlaceToPath(pos2, n1);
+			p.addPlaceToPath(pos1, n2);
+					
+			rand = Math.random();
 			System.out.println("Swap mutation used");
+			System.out.println(m_rate);
 		}
 		
 		//If not swap, scramble a random subset of Path p
@@ -204,6 +206,7 @@ public class Algorithm {
 			Random er = new Random();
 			int begin = br.nextInt((int)p.PathSize());
 			int end = er.nextInt((int)p.PathSize());
+
 			//Make sure our pointers aren't overlapping
 			while (begin > end)
 			{
@@ -234,7 +237,7 @@ public class Algorithm {
 				}
 
 			}
-			System.out.println("Scramble Mutation Used");
+			//System.out.println("Scramble Mutation Used");
 		}
 		//Generate a new random variable
 		rand = Math.random();
@@ -265,7 +268,7 @@ public class Algorithm {
 		//The fittest path in the tourney pool is returned and can be used for parents in crossover
 		Path champion = t1.getTopFitPath();
 		
-		System.out.println("tourneySelection used");
+		//System.out.println("tourneySelection used");
 		
 		return champion;
 	}
@@ -284,7 +287,7 @@ public class Algorithm {
 		double prob = select.nextDouble();
 		int subSize = (pop.getPopSize() / 4);
 		
-		System.out.println("Used Roulette Selection");
+		//System.out.println("Used Roulette Selection");
 		
 		if (prob <= .49)
 		{

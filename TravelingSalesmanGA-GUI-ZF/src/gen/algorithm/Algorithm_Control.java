@@ -111,9 +111,9 @@ public class Algorithm_Control {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		//Charting code
-		chartFrame.setBounds(200, 30, 800, 600);
-		chartFrame.getContentPane().setLayout(null);
+		JFrame frame2 = new JFrame("Charts");
+		frame2.setBounds(200, 30, 800, 600);
+        
         
 		
 		TextArea generationsTextArea = new TextArea();
@@ -361,15 +361,30 @@ public class Algorithm_Control {
 					mutationRate = .05;
 					mutationRateCB.setActionCommand("The mutation rate was .05");
 				}
-				else 
+				else if (mutationRateCB.getSelectedIndex() == 3)
 				{
 					mutationRate = .1;
 					mutationRateCB.setActionCommand("The mutation rate was .1");
 				}
+				else if (mutationRateCB.getSelectedIndex() == 4)
+				{
+					mutationRate = .2;
+					mutationRateCB.setActionCommand("The mutation rate was .2");
+				}
+				else if (mutationRateCB.getSelectedIndex() == 5)
+				{
+					mutationRate = .3;
+					mutationRateCB.setActionCommand("The mutation rate was .3");
+				}
+				else
+				{
+					mutationRate = .4;
+					mutationRateCB.setActionCommand("The mutation rate was .4");
+				}
 			}
 		});
-		mutationRateCB.setModel(new DefaultComboBoxModel(new String[] {".005 Mutation Rate", ".01 Mutation Rate", ".05 Mutation Rate", ".1 Mutation Rate"}));
-		mutationRateCB.setMaximumRowCount(4);
+		mutationRateCB.setModel(new DefaultComboBoxModel(new String[] {".005 Mutation Rate", ".01 Mutation Rate", ".05 Mutation Rate", ".1 Mutation Rate", ".2 Mutation Rate", ".3 Mutation Rate", ".4 Mutation Rate"}));
+		mutationRateCB.setMaximumRowCount(7);
 		mutationRateCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		mutationRateCB.setBackground(Color.WHITE);
 		mutationRateCB.setBounds(997, 174, 221, 34);
@@ -391,11 +406,16 @@ public class Algorithm_Control {
 		Button startButton = new Button("Start Algorithm");
 		startButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				frame2.setVisible(false);
+				
+				DefaultXYDataset ds = new DefaultXYDataset();
+				
 				for (int i=0; i < numPlaces; i++)
 				{
 					Place place = new Place();
 					Path.GetMap().add(place);
 				}
+				
 				//Getting selected options for textual output
 				String select = selectionGroup.getSelection().getActionCommand();
 				String cross =crossGroup.getSelection().getActionCommand();
@@ -425,6 +445,9 @@ public class Algorithm_Control {
 			    	generationsTextArea.append(" \n" + "Generation " + (gen+1) + ":" + "\n" + "Best Path Length: " + df.format(initPop.getTopFitPath().calcPathDistance()) + "\n" +
 				    		"Fitness Score: " + df2.format(initPop.getTopFitPath().GetPathFitness()) + "\n"
 				    		);
+			    	
+			    	double[][] data = { {gen}, {initPop.getTopFitPath().calcPathDistance()} };
+			    	ds.addSeries("Best Path Length per Generation", data);
 
 			    }
 			    fittestTextArea.append("\nThis algorithm ran for " + numGenerations + " generations and had " + numPlaces + " places within each path, " + numPaths + " paths in the population, and a mutation rate of "
@@ -443,6 +466,15 @@ public class Algorithm_Control {
 		        Path.GetMap().clear();
 		        algorithmCount++;
 		        
+                
+                JFreeChart chart = ChartFactory.createXYLineChart("Test Chart",
+                        "Generation", "Best Path Length", ds, PlotOrientation.VERTICAL, true, true,
+                        false);
+
+                ChartPanel cp = new ChartPanel(chart);
+                frame2.getContentPane().add(cp);
+                
+                frame2.setVisible(true);
 		        
 		        /*Charting code found at: https://www.tutorialspoint.com/jfreechart/jfreechart_xy_chart.htm
 		        JFreeChart is a GNU Open Resource Library of charting and graphing functionalities for the Java language*/
