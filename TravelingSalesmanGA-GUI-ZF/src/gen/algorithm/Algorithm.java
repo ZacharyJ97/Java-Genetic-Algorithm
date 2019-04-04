@@ -20,7 +20,7 @@ public class Algorithm {
 	//Static variables for the population size, mutation rate default, and default tournament pool size
 	public static int popSize;
 	private static double m_rate = .1;
-	private static int tournPool;
+	private static int tournPool = 10;
 	
 	
 	//Crossover methods like this can be found described here https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_crossover.htm
@@ -43,6 +43,7 @@ public class Algorithm {
 			//Parent 1's random subset of places to cross
 			Random br = new Random();
 			Random er = new Random();
+			//begin and end indexes with upper bound of the path size
 			int begin = br.nextInt((int)p1.PathSize());
 			int end = er.nextInt((int)p1.PathSize());
 			//Preventing pointer overlap
@@ -54,7 +55,7 @@ public class Algorithm {
 			//Take the subset from p1 and insert it into the child
 			for (int index = 0; index < resultChild.PathSize(); index++)
 			{
-				//Take the subset range
+				//Take the subset range including the lower and upper bound
 				if(index >= begin && index <= end)
 				{
 					resultChild.addPlaceToPath(index, p1.GetPlaceFromPath(index));
@@ -189,7 +190,8 @@ public class Algorithm {
 			//Swap those two places
 			p.addPlaceToPath(pos2, n1);
 			p.addPlaceToPath(pos1, n2);
-					
+			
+			//Regenerating a random variable
 			rand = Math.random();
 			System.out.println("Swap mutation used");
 			System.out.println(m_rate);
@@ -199,7 +201,7 @@ public class Algorithm {
 		if(swap == false && rand < m_rate)
 		{
 			//Temporary array to hold subset
-			ArrayList<Place> p2 = new ArrayList<Place>();
+			ArrayList<Place> temp = new ArrayList<Place>();
 			
 			//Random variables to select a begin pointer and end pointer for the subset
 			Random br = new Random();
@@ -220,11 +222,11 @@ public class Algorithm {
 				//Inserted into our temp array
 				if(index >= begin && index <= end)
 				{
-					p2.add(p.GetPlaceFromPath(index));
+					temp.add(p.GetPlaceFromPath(index));
 				}
 			}
 			//scrambling the extracted subset
-			Collections.shuffle(p2);
+			Collections.shuffle(temp);
 			
 			//Insert the subset from p2 into our path
 			int index3 = 0;
@@ -232,7 +234,7 @@ public class Algorithm {
 			{
 				if (index2 >= begin && index2 <= end)
 				{
-					p.addPlaceToPath(index2, p2.get(index3));
+					p.addPlaceToPath(index2, temp.get(index3));
 					index3++;
 				}
 
@@ -244,7 +246,8 @@ public class Algorithm {
 	}
 		
 	
-	//Info for coding obtained from: https://www.geeksforgeeks.org/tournament-selection-ga/ and 
+	//Info for coding obtained from: https://www.geeksforgeeks.org/tournament-selection-ga/ 
+	//and 
 	//https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_parent_selection.htm
 	/**
 	 * Selection function for choosing parents via tournament style

@@ -19,15 +19,12 @@ public class Path {
 	private static ArrayList<Place> map = new ArrayList<Place>();
 	public static Place GetPlaceFromMap(int i){ return map.get(i); }
 	public static ArrayList<Place> GetMap() {return map;}
-	//Add place into the Map
-	public static void AddPlaceToMap(Place d){ map.add(d);}
 	/**************************************************************/
 	
 	//Arraylist for a path through all the places
     private ArrayList<Place> travelPath = new ArrayList<Place>();
     
     private double fitnessScore;
-    private double totalDistance;
     private double placeDistance;
     
     public DecimalFormat df = new DecimalFormat("###");
@@ -79,32 +76,29 @@ public class Path {
      */
     public double calcPathDistance()
     {
-    	if (totalDistance == 0) 
-    	{
     		double pathDistance = 0;
+    		Place origin = null;
+    		Place next = null;
             //Roll through all places in path
             for (int i = 0; i < PathSize(); i++) 
             {
                 //Origin
-                Place origin = GetPlaceFromPath(i);
-                //Immediate following Place
-                Place next;
+                origin = GetPlaceFromPath(i);
+                int nextPos = i+1;
                 
                 //Check for the possible end of the path, else we will be returning to beginning point of whole path
-                if( i+1 < PathSize() )
+                if( nextPos < PathSize() )
                 {
-                    next = GetPlaceFromPath(i+1);
+                    next = GetPlaceFromPath(nextPos);
+                    pathDistance += MeasurePlaceDistance(origin, next);
                 }
                 else
                 {
-                    next = GetPlaceFromPath(0);
+                    pathDistance += MeasurePlaceDistance(origin, GetPlaceFromPath(0)); 
                 }
-                // Get the distance between the two cities
-                pathDistance = pathDistance + MeasurePlaceDistance(origin, next);
+                
             }
-            totalDistance = pathDistance;
-        }
-        return totalDistance;
+        return pathDistance;
     }
     
     //Fitness scoring such as this was detailed in the pdf at this location: https://pdfs.semanticscholar.org/c31b/fd16935da83e419d631245272d7838262308.pdf
@@ -120,17 +114,6 @@ public class Path {
     }
     
     /**
-     * Returns boolean if the path currently has the place passed in as a parameter
-     * To be handy later for crossover functionalities
-     * @param p Place to check whether or not is is present
-     * @return Boolean indicating if the place is already present in the path
-     */
-    public boolean HasDuplicatePlace(Place p)
-    {
-    	return travelPath.contains(p);
-    }
-    
-    /**
      * Rolls through the map of places and adds them all to the path
      */
     public void CreatePath() {
@@ -140,6 +123,17 @@ public class Path {
          addPlaceToPath(index, p);
          index++;
        }
+    }
+    
+    /**
+     * Returns boolean if the path currently has the place passed in as a parameter
+     * To be handy later for crossover functionalities
+     * @param p Place to check whether or not is is present
+     * @return Boolean indicating if the place is already present in the path
+     */
+    public boolean HasDuplicatePlace(Place p)
+    {
+    	return travelPath.contains(p);
     }
     
     //Distance formula can be found here: https://www.khanacademy.org/math/basic-geo/basic-geometry-pythagorean-theorem/pythagorean-theorem-distance/a/distance-formula
