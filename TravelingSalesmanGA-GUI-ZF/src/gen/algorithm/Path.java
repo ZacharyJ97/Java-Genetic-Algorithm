@@ -118,7 +118,7 @@ public class Path {
      */
     public void CreatePath() {
     	int index = 0;
-       // Loop through all our places in the map and add them to the current path
+       //// Loop through all our places in the map and add them to the current path
        for (Place p : map) {
          addPlaceToPath(index, p);
          index++;
