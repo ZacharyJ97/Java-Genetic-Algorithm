@@ -166,17 +166,12 @@ public class Algorithm_Control {
 					numGenerations = 1000;
 					numGenerationCB.setActionCommand("1000 Generations");
 				}
-				else 
-				{
-					numGenerations = 2000;
-					numGenerationCB.setActionCommand("2000 Generations");
-				}
 			}
 		});
 		numGenerationCB.setBackground(Color.WHITE);
 		numGenerationCB.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		numGenerationCB.setMaximumRowCount(4);
-		numGenerationCB.setModel(new DefaultComboBoxModel(new String[] {"100 Generations", "500 Generations", "1000 Generations", "2000 Generations"}));
+		numGenerationCB.setModel(new DefaultComboBoxModel(new String[] {"100 Generations", "500 Generations", "1000 Generations"}));
 		numGenerationCB.setBounds(997, 124, 221, 34);
 		frame.getContentPane().add(numGenerationCB);
 		

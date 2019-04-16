@@ -261,12 +261,22 @@ public class Algorithm {
 		Population t1 = new Population(tournPool,null, false);
 		//Contestants are chosen at random
 		Random r1 = new Random();
-		for(int i = 0; i < tournPool; i++)
+		
+		//Selects a random path from the population and adds it to the tourney pool
+		int randomPath = r1.nextInt(p.getPopSize());
+		Path randP = p.getPathFromPop(randomPath);
+		t1.addPathToPop(randP, 0);
+		
+		for(int i = 1; i < tournPool; i++)
 		{
-			//Selects a random path from the population and adds it to the tourney ppol
-			int randomPath = r1.nextInt(p.getPopSize());
-			Path randP = p.getPathFromPop(randomPath);
-			t1.addPathToPop(randP, i);
+			//Selects a random path from the population and adds it to the tourney pool
+			randomPath = r1.nextInt(p.getPopSize());
+			randP = p.getPathFromPop(randomPath);
+			
+			if ((randP.GetPathFitness() >= (t1.getPathFromPop(i-1).GetPathFitness()*.60)))
+			{
+				t1.addPathToPop(randP, i);
+			}
 		}
 		//The fittest path in the tourney pool is returned and can be used for parents in crossover
 		Path champion = t1.getTopFitPath();
