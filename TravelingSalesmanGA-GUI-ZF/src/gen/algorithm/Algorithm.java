@@ -267,15 +267,28 @@ public class Algorithm {
 		Path randP = p.getPathFromPop(randomPath);
 		t1.addPathToPop(randP, 0);
 		
+		int count = 1;
+		
 		for(int i = 1; i < tournPool; i++)
 		{
 			//Selects a random path from the population and adds it to the tourney pool
 			randomPath = r1.nextInt(p.getPopSize());
 			randP = p.getPathFromPop(randomPath);
 			
-			if ((randP.GetPathFitness() >= (t1.getPathFromPop(i-1).GetPathFitness()*.60)))
+			//Avoiding potential placement of nothing in a spot in the tournpool (which may have occurred previously)
+			while (count < tournPool)
 			{
-				t1.addPathToPop(randP, i);
+				if ((randP.GetPathFitness() >= (t1.getPathFromPop(i-1).GetPathFitness()*.60)))
+				{
+					t1.addPathToPop(randP, i);
+					count++;
+					break;
+				}
+				else
+				{
+					randomPath = r1.nextInt(p.getPopSize());
+					randP = p.getPathFromPop(randomPath);
+				}
 			}
 		}
 		//The fittest path in the tourney pool is returned and can be used for parents in crossover
