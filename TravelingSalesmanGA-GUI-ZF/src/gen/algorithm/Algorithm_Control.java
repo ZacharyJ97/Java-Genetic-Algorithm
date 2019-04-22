@@ -407,6 +407,7 @@ public class Algorithm_Control {
 			    
 				//Resetting top text area for each start algorithm
 				generationsTextArea.setText(null);
+				
 				//Beginning Population
 			    Population initPop = new Population(numPaths,null,true);
 			    

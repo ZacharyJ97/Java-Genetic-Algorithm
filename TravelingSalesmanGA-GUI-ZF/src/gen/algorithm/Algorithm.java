@@ -3,6 +3,9 @@ import java.util.*;
 
 /**
  * Handles performing the operations of a genetic algorithm, such as selection, crossover, mutation, etc
+ * Please note that there will be commented out functional code that was either used for monitoring events or
+ * personal attempts at testing different operator schemes that may have yet to come to fruition.
+ * 
  * @author copyright Zachary Fitzpatrick, 2019.
  * 
  *Created under educational circumstances for an Intelligent Systems Undergraduate Course, a capstone for the Computer Science Program at Thomas College.
@@ -53,13 +56,9 @@ public class Algorithm {
 			}
 			
 			//Take the subset from p1 and insert it into the child
-			for (int index = 0; index < resultChild.PathSize(); index++)
+			for (int index = begin; index <= end; index++)
 			{
-				//Take the subset range including the lower and upper bound
-				if(index >= begin && index <= end)
-				{
 					resultChild.addPlaceToPath(index, p1.GetPlaceFromPath(index));
-				}
 			}
 			
 			//Take the other cities from p2 and insert into child
@@ -92,9 +91,7 @@ public class Algorithm {
 			//Take the subset from p1 and insert it into the child
 			for (int index = 0; index <= end; index++)
 			{
-
 				resultChild.addPlaceToPath(index, p1.GetPlaceFromPath(index));
-
 			}
 			
 			//Take the other cities from p2 and insert into child
@@ -104,7 +101,7 @@ public class Algorithm {
 				if(!resultChild.HasDuplicatePlace(p2.GetPlaceFromPath(index2)))
 				{
 					//Roll through the child's positions
-					for (int ichild = 0; ichild < resultChild.PathSize(); ichild++)
+					for (int ichild = index2; ichild < resultChild.PathSize(); ichild++)
 					{
 						//if position is null we will add p2's path (avoids overwriting the subset already inserted)
 						if(resultChild.GetPlaceFromPath(ichild)==null)
@@ -191,10 +188,8 @@ public class Algorithm {
 			p.addPlaceToPath(pos2, n1);
 			p.addPlaceToPath(pos1, n2);
 			
-			//Regenerating a random variable
-			rand = Math.random();
-			System.out.println("Swap mutation used");
-			System.out.println(m_rate);
+			//System.out.println("Swap mutation used");
+			//System.out.println(m_rate);
 		}
 		
 		//If not swap, scramble a random subset of Path p
@@ -239,10 +234,12 @@ public class Algorithm {
 				}
 
 			}
+			
 			//System.out.println("Scramble Mutation Used");
 		}
 		//Generate a new random variable
 		rand = Math.random();
+		
 	}
 		
 	
@@ -256,7 +253,7 @@ public class Algorithm {
 	 */
 	private static Path tourneyStyleSelection(Population p)
 	{
-		tournPool = (p.getPopSize() / 2);
+		tournPool = (p.getPopSize() / 4);
 		//Create a population to hold our tournament contestants, sized at half a population by default
 		Population t1 = new Population(tournPool,null, false);
 		//Contestants are chosen at random
@@ -350,7 +347,7 @@ public class Algorithm {
 	 * @param tourney Choose tournament style for a selection method
 	 * @param roulette Choose roulette style for a selection method
 	 * @param swapMutation Choose whether or not swap mutation is used, it not then scramble mutation is used
-	 * @param mutateRate TODO
+	 * @param mutateRate The probability rate for mutation to occur
 	 * @return The new population is returned
 	 */
 	public static Population generateNewPop(Population p, boolean randomCrossover, boolean halfPathCrossover, boolean tourney, boolean roulette, boolean swapMutation, double mutateRate )
@@ -365,43 +362,41 @@ public class Algorithm {
 		swapMutate = swapMutation;
 		m_rate = mutateRate;
 		
-		
-		
-			//Roll through the population
-			for (int index = 0; index < p.getPopSize(); index = index+2)
+		//Roll through the population
+		for (int index = 0; index < p.getPopSize(); index = index+2)
+		{
+			Path p1 = new Path();
+			Path p2 = new Path();
+			
+			//Options for selection are checked appropriately
+			if (tournamentStyle==true && rouletteStyle == false)
 			{
-				Path p1 = new Path();
-				Path p2 = new Path();
-				
-				//Options for selection are checked appropriately
-				if (tournamentStyle==true && rouletteStyle == false)
-				{
-					//Parents chosen by the tournament selection
-					p1 = tourneyStyleSelection(p);
-					p2 = tourneyStyleSelection(p);
-				}
-				if (tournamentStyle == false && rouletteStyle == true)
-				{
-					//Parents chosen by roulette selection
-					p1 = rouletteSelection(p);
-					p2 = rouletteSelection(p);
-				}
-				
-				
-				//Apply crossover to the parents, may be random subset or half the path
-				Path resultChild = crossover(p1,p2,randCrossover,halfCrossover);
-				Path resultChild2 = crossover(p2,p1,randCrossover,halfCrossover);
-				
-				//Sprinkle mutation which may be swap or scramble style
-				mutation(m_rate, resultChild, swapMutate);
-				mutation(m_rate, resultChild2, swapMutate);
-				
-				//Next generation formed by the final child product
-				nextGeneration.addPathToPop(resultChild, index);
-				nextGeneration.addPathToPop(resultChild2, index+1);
-				
+				//Parents chosen by the tournament selection
+				p1 = tourneyStyleSelection(p);
+				p2 = tourneyStyleSelection(p);
 			}
-		
+			if (tournamentStyle == false && rouletteStyle == true)
+			{
+				//Parents chosen by roulette selection
+				p1 = rouletteSelection(p);
+				p2 = rouletteSelection(p);
+			}
+			
+			
+			//Apply crossover to the parents, may be random subset or half the path
+			Path resultChild = crossover(p1,p2,randCrossover,halfCrossover);
+			Path resultChild2 = crossover(p2,p1,randCrossover,halfCrossover);
+			
+			//Sprinkle mutation which may be swap or scramble style
+			mutation(m_rate, resultChild, swapMutate);
+			mutation(m_rate, resultChild2, swapMutate);
+			
+			//Next generation formed by the final child product
+			nextGeneration.addPathToPop(resultChild, index);
+			nextGeneration.addPathToPop(resultChild2, index+1);
+			
+		}
+	
 		return nextGeneration;
 		
 	}
